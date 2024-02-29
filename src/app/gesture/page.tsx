@@ -31,28 +31,22 @@ const Gesture: React.FC = () => {
 
   let animationFrameId: number;
 
-  useEffect(() => {
-    const createGestureRecognizer = async () => {
-      const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
-      );
+  async function createGestureRecognizer() {
+    const vision = await FilesetResolver.forVisionTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+    );
 
-      const recognizer = await GestureRecognizer.createFromOptions(vision, {
-        baseOptions: {
-          modelAssetPath:
-            "https://storage.googleapis.com/visionx_gesture_recognizer/gesture_recognizer_better.task",
-          delegate: "GPU",
-        },
-        runningMode: runningMode,
-        numHands: 1,
-      });
-      5;
-      setGestureRecognizer(recognizer);
-    };
-
-    createGestureRecognizer();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const recognizer = await GestureRecognizer.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath:
+          "https://storage.googleapis.com/visionx_gesture_recognizer/gesture_recognizer_better.task",
+        delegate: "GPU",
+      },
+      runningMode: runningMode,
+      numHands: 1,
+    });
+    setGestureRecognizer(recognizer);
+  }
 
   let lastVideoTime = -1;
   let webcamResults: any = undefined;
@@ -89,13 +83,11 @@ const Gesture: React.FC = () => {
                 const categoryScore: number = parseFloat(
                   Number(webcamResults.gestures[0][0].score * 100).toFixed(2)
                 );
-                if (categoryScore > 40) {
+                if (categoryScore > 60) {
                   setCategoryNameState(categoryName);
                   setCategoryScoreState(categoryScore);
                   setRecognizedLetter(categoryName);
                 }
-
-                console.log(recognizedLetter);
               }
             }
 
@@ -146,6 +138,8 @@ const Gesture: React.FC = () => {
     } catch (error) {
       console.error("Error accessing webcam:", error);
     }
+
+    setGestureRecognizer(null);
   };
 
   function recognize() {
@@ -200,21 +194,31 @@ const Gesture: React.FC = () => {
   }, [recognizedLetter, recognizedLetter, textChallenge]);
 
   return (
-    <div className="w-screen h-screen bg-gray-800 flex flex-col items-center">
-      <div className="w-72 h-60">
+    <div className="w-full h-screen bg-gray-800 flex flex-col items-center">
+      <div className="w-72">
         <button
           id="webcamButton"
           onClick={async () => {
+            await createGestureRecognizer();
             await enableWebcam();
           }}
         >
           Enable Webcam
         </button>
+
+        <button
+          className="ml-10"
+          onClick={() => {
+            setTextChallenge(randomWord());
+          }}
+        >
+          Skip
+        </button>
         <Webcam
           videoConstraints={videoConstraints}
           audio={false}
           ref={webcamRef}
-          className="z-10 aspect-video"
+          className="z-10 aspect-video opacity-0"
           id="webcam"
           width={videoWidth}
           height={videoHeight}
@@ -222,10 +226,10 @@ const Gesture: React.FC = () => {
         />
       </div>
       <div className="w-4/5 h-4/5 m-auto">
-        <h3 className="w-full text-7xl font-bold text-center">
+        <h3 className="w-full text-7xl font-bold text-center mt-0">
           {recognizedLetter}
         </h3>
-        <h3 className="w-full text-3xl font-bold text-center mt-6">
+        <h3 className="w-full text-4xl font-bold text-center mt-6">
           <span id="recognized-text">{recognizedText}</span>
           <span id="text-challenge" className="text-gray-400">
             {textChallenge}
