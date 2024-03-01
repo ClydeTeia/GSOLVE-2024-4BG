@@ -4,7 +4,7 @@
 //   createClassroom,
 //   addStudentToClassroom,
 // } from "../../../utils/classroom/createClassroom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -24,10 +24,38 @@ import { Delete } from "@/components/buttons/deleteButton";
 import { CreateClassroom } from "@/components/classroom/createClassroom";
 import DisplayClassroomLists from "@/components/classroom/displayClassroomLists";
 import DisplayClassroomInfo from "@/components/classroom/displayClassroomInfo";
+import { auth } from "@/firebase/config";
+import { readData } from "@/firebase/crud";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 export default function Classroom({}: Props) {
+  const router = useRouter();
+
+  const user = auth?.currentUser;
+  const userId = user?.uid;
+
+  if (!user) {
+    router.push("/login");
+  }
+
+  const [classroomListData, setClassroomListData] = useState([]);
+  const [classroomInfodata, setClassroomInfoData] = useState([]);
+
+  useEffect(() => {
+    // fetch classroom list data
+    const fetchData = async () => {
+      try {
+        const res = await readData("classrooms", "userId", userId);
+        setClassroomListData(res);
+      } catch (error) {
+        console.error("Error fetching classroom list data:", error);
+      }
+    };
+    fetchData();
+  }, [userId]);
+
   // const [classroomId, setClassroomId] = useState("");
   // const [studentData, setStudentData] = useState<{
   //   name: string;
@@ -54,7 +82,7 @@ export default function Classroom({}: Props) {
         <CreateClassroom />
       </div>
       <div className="flex w-full h-full">
-        <DisplayClassroomLists />
+        <DisplayClassroomLists classroomListData={classroomListData} />
         <div className="w-full h-full">
           <DisplayClassroomInfo />
         </div>

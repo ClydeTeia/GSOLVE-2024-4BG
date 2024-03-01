@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -12,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 // import { createClassroom } from "@/utils/classroom/createClassroom";
-import { createDocumentedData } from "../../firebase/crud";
+import { createData } from "../../firebase/crud";
 
 type eventChange = React.ChangeEvent<HTMLInputElement>;
 type eventSubmit = React.FormEvent<HTMLFormElement>;
@@ -33,7 +34,7 @@ export function CreateClassroom() {
 
   const handleSubmit = async (e: eventSubmit) => {
     e.preventDefault();
-    createDocumentedData("classrooms", formData.name, formData);
+    createData("classrooms", formData);
     setFormData({
       name: "",
       subject: "",
@@ -82,7 +83,9 @@ export function CreateClassroom() {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save Classroom</Button>
+            <DialogClose asChild>
+              <Button type="submit">Save Classroom</Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>

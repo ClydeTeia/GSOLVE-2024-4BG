@@ -60,14 +60,16 @@ export async function createDocumentedData(
 export async function readData(table: string, name: string, value: unknown) {
   try {
     const q = query(collection(db, table), where(name, "==", value));
-
     const querySnapshot = await getDocs(q);
+
+    const data: any = [];
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
+      data.push({ id: doc.id, ...doc.data() });
     });
+    return data;
   } catch (e) {
     console.error("Error reading document: ", e);
+    return [];
   }
 }
 
