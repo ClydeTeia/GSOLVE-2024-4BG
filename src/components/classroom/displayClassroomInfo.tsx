@@ -1,68 +1,6 @@
 import { Separator } from "@radix-ui/react-separator";
 import React from "react";
-
-const studentData = [
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-];
+import { studentData } from "@/data/classroom/studentList";
 
 type Props = {};
 
@@ -73,7 +11,7 @@ export default function DisplayClassroomInfo({}: Props) {
       <div className="w-full h-full">
         {studentData.map((student) => {
           return (
-            <div key={student.name}>
+            <div key={student.id}>
               <div>{student.name}</div>
               <div>{student.email}</div>
               <Separator className="h-10" />
