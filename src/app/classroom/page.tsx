@@ -5,17 +5,7 @@
 //   addStudentToClassroom,
 // } from "../../../utils/classroom/createClassroom";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -36,14 +26,12 @@ export default function Classroom({}: Props) {
   const user = auth?.currentUser;
   const userId = user?.uid;
 
-  if (!user) {
-    router.push("/login");
-  }
-
-  const [classroomListData, setClassroomListData] = useState([]);
-  const [classroomInfodata, setClassroomInfoData] = useState([]);
-
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+    }
+
     // fetch classroom list data
     const fetchData = async () => {
       try {
@@ -54,7 +42,12 @@ export default function Classroom({}: Props) {
       }
     };
     fetchData();
-  }, [userId]);
+    console.log("from client", userId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [classroomListData, setClassroomListData] = useState([]);
+  const [classroomInfodata, setClassroomInfoData] = useState([]);
 
   // const [classroomId, setClassroomId] = useState("");
   // const [studentData, setStudentData] = useState<{

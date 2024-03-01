@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useContext, createContext, useState, useEffect } from "react";
 import {
@@ -12,13 +12,13 @@ import {
 } from "firebase/auth";
 import { auth } from "@/firebase/config";
 
-import { User } from 'firebase/auth'; // Make sure to import the User type from Firebase
+import { User } from "firebase/auth"; // Make sure to import the User type from Firebase
 
 // Define the type for the context value
 interface AuthContextValue {
   user: User | null;
   emailSignIn: (email: string, password: string) => void;
-  emailSignUp: (email: string, password: string, username: string) => void
+  emailSignUp: (email: string, password: string, username: string) => void;
   googleSignIn: () => void;
   logOut: () => void;
 }
@@ -26,43 +26,57 @@ interface AuthContextValue {
 // Create the context with the default value
 const AuthContext = createContext<AuthContextValue>({
   user: null,
-  emailSignIn: () => { },
-  emailSignUp: () => { },
-  googleSignIn: () => { },
-  logOut: () => { },
+  emailSignIn: () => {},
+  emailSignUp: () => {},
+  googleSignIn: () => {},
+  logOut: () => {},
 });
 
 export const AuthContextProvider = ({
-  children
+  children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const emailSignUp = async (email: string, password: string, username: string) => {
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        // Signed up 
+  const emailSignUp = async (
+    email: string,
+    password: string,
+    username: string
+  ) => {
+    await createUserWithEmailAndPassword(auth, email, password).then(
+      async (userCredential) => {
+        // Signed up
         const user = userCredential.user;
+        const token = await user.getIdToken();
+        sessionStorage.setItem("Token", token);
         await updateProfile(user, {
-          displayName: username
-        })
-        console.log(user.displayName, 'has logged in')
-      })
-  }
+          displayName: username,
+        });
+        console.log(user.displayName, "has logged in");
+      }
+    );
+  };
 
   const emailSignIn = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password)
-  }
+    await signInWithEmailAndPassword(auth, email, password);
+  };
 
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider).then(async (userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      const token = await user.getIdToken();
+      sessionStorage.setItem("Token", token);
+    });
   };
 
   const logOut = () => {
-    signOut(auth);
-    console.log(user?.displayName, "has logged out")
+    signOut(auth).then(() => {
+      sessionStorage.removeItem("Token");
+    });
+    console.log(user?.displayName, "has logged out");
   };
 
   useEffect(() => {
@@ -73,7 +87,9 @@ export const AuthContextProvider = ({
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, emailSignIn, emailSignUp, googleSignIn, logOut }}>
+    <AuthContext.Provider
+      value={{ user, emailSignIn, emailSignUp, googleSignIn, logOut }}
+    >
       {children}
     </AuthContext.Provider>
   );
