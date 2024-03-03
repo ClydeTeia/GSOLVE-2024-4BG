@@ -1,3 +1,6 @@
+# Addtional Info
+My team member chdean has much more contribution than the one github insights says. We have to clone it to another repository, because there is another hackathon with the same project. The reason we can't use the other one is because we can't update it while the competition is ongoing there. So we have no choice but to clone it. Idk how to clone it without losing the contributions of my other team mates.
+
 ## Link to hosted version
 https://visionx-413000.web.app/gesture
 
