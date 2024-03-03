@@ -2,6 +2,8 @@ import { Separator } from "@radix-ui/react-separator";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import AddStudentButton from "./addStudentsToClass";
+import { read } from "fs";
+import { readData } from "@/firebase/crud";
 
 interface StudentList {
   id: number;
@@ -12,17 +14,38 @@ interface StudentList {
 interface Props {
   classroomInfoData: StudentList[];
   selectedClassroom: string;
+  setIsStudentAdded: any;
+}
+
+interface Props {
+  classroomInfoData: StudentList[];
+  selectedClassroom: string;
+  setIsStudentAdded: any;
 }
 
 export default function DisplayClassroomInfo({
   classroomInfoData,
   selectedClassroom,
+  setIsStudentAdded,
 }: Props) {
+  // useEffect(() => {
+  //   console.log("Classroom Info:", selectedClassroom);
+
+  //   // fetch classroom info data
+  //   readData("classrooms", `${selectedClassroom}`, "students").then((res) => {
+  //     console.log(res);
+  //     setClassroomInfoData(res);
+  //   });
+  // }, [selectedClassroom]);
+
   return (
     <div className="flex flex-col w-full h-full">
       <div className="flex justify-between mr-14">
         <h3>Classroom Info:</h3>
-        <AddStudentButton classroomId={selectedClassroom} />
+        <AddStudentButton
+          classroomId={selectedClassroom}
+          setIsStudentAdded={setIsStudentAdded}
+        />
       </div>
 
       <div className="w-full h-full">

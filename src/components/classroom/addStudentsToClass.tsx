@@ -17,13 +17,12 @@ import { AddStudentToClassroom } from "../../../utils/classroom/addStudentToClas
 
 export default function AddStudentButton({
   classroomId,
+  setIsStudentAdded,
 }: {
   classroomId: string;
+  setIsStudentAdded: any;
 }) {
   const [students, setStudents] = useState<any>([]);
-  const [selectedUser, setSelectedUser] = useState<any>();
-  const [showAddButton, setShowAddButton] = useState(false);
-  const [selectedObject, setSelectedObject] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -54,6 +53,7 @@ export default function AddStudentButton({
     try {
       await AddStudentToClassroom(classroomId, students); //classroomId, students
       console.log("Student added successfully!");
+      setIsStudentAdded(true);
     } catch (error) {
       console.error("Error adding student:", error);
     }

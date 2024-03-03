@@ -5,9 +5,9 @@ export async function AddStudentToClassroom(
   classroomId: string,
   students: any
 ) {
-  const washingtonRef = doc(db, "classrooms", classroomId);
+  const classroomRef = doc(db, "classrooms", classroomId);
 
-  await updateDoc(washingtonRef, {
+  await updateDoc(classroomRef, {
     students: arrayUnion(students),
   });
 }

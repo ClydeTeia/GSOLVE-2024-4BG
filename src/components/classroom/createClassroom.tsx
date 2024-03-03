@@ -18,7 +18,7 @@ import { UserAuth } from "@/app/context/firebaseContext";
 type eventChange = React.ChangeEvent<HTMLInputElement>;
 type eventSubmit = React.FormEvent<HTMLFormElement>;
 
-export function CreateClassroom({ setIsCreated }: any) {
+export function CreateClassroom({ setIsClassCreated }: any) {
   const user = UserAuth().user;
   const userId = user?.uid;
 
@@ -50,7 +50,7 @@ export function CreateClassroom({ setIsCreated }: any) {
         subject: "",
         teacherId: "",
       });
-      setIsCreated(true);
+      setIsClassCreated(true);
     } catch (error) {
       console.error("Error creating classroom:", error);
     }
