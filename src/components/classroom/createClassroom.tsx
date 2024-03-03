@@ -12,33 +12,48 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { createClassroom } from "@/utils/classroom/createClassroom";
 import { createData } from "../../firebase/crud";
+import { UserAuth } from "@/app/context/firebaseContext";
 
 type eventChange = React.ChangeEvent<HTMLInputElement>;
 type eventSubmit = React.FormEvent<HTMLFormElement>;
 
-export function CreateClassroom() {
+export function CreateClassroom({ setIsCreated }: any) {
+  const user = UserAuth().user;
+  const userId = user?.uid;
+
   const [formData, setFormData] = useState({
     name: "",
     subject: "",
+    teacherId: "",
   });
+
+  if (!userId) return null;
 
   const handleInputChange = (e: eventChange) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
+      teacherId: userId,
+      students: [],
     }));
   };
 
   const handleSubmit = async (e: eventSubmit) => {
     e.preventDefault();
-    createData("classrooms", formData);
-    setFormData({
-      name: "",
-      subject: "",
-    });
+    try {
+      const docId = await createData("classrooms", formData);
+      console.log("Classroom created with ID:", docId);
+      setFormData({
+        name: "",
+        subject: "",
+        teacherId: "",
+      });
+      setIsCreated(true);
+    } catch (error) {
+      console.error("Error creating classroom:", error);
+    }
   };
 
   return (

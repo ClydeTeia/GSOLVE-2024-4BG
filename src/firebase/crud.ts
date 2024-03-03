@@ -18,15 +18,7 @@ export async function createData(
   data: Record<string, unknown>
 ): Promise<void> {
   try {
-    const user = auth.currentUser;
-
-    if (!user) {
-      throw new Error("User not logged in.");
-    }
-    const userId = user.uid;
-
-    const dataWithUserId = { userId, ...data };
-    const docRef = await addDoc(collection(db, table), dataWithUserId);
+    const docRef = await addDoc(collection(db, table), data);
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     console.error("Error adding document: ", e);
@@ -60,16 +52,33 @@ export async function createDocumentedData(
 export async function readData(table: string, name: string, value: unknown) {
   try {
     const q = query(collection(db, table), where(name, "==", value));
+    console.log("Query:", q);
     const querySnapshot = await getDocs(q);
 
     const data: any = [];
     querySnapshot.forEach((doc) => {
       data.push({ id: doc.id, ...doc.data() });
     });
-    return data;
+    console.log("Query Result:", data);
+    return data.length > 0 ? data : [];
   } catch (e) {
     console.error("Error reading document: ", e);
-    return [];
+    return null;
+  }
+}
+
+export async function readAllData(collectionName: string) {
+  try {
+    const querySnapshot = await getDocs(collection(db, collectionName));
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return data;
+  } catch (error: any) {
+    throw new Error(
+      `Error reading data from ${collectionName}: ${error.message}`
+    );
   }
 }
 

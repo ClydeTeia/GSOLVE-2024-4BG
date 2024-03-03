@@ -20,14 +20,14 @@ export const db = getFirestore(app);
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 
-export let uid = "";
-
+// for testing
+export let userId = "";
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/auth.user
-    uid = user.uid;
-    console.log(uid);
+    console.log(user.uid);
+    userId = user.uid;
   } else {
     console.log("No user is signed in.");
   }

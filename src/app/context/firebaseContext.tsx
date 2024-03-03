@@ -13,6 +13,7 @@ import {
 import { auth } from "@/firebase/config";
 
 import { User } from "firebase/auth"; // Make sure to import the User type from Firebase
+import { createUser } from "@/components/createUser/createUser";
 
 // Define the type for the context value
 interface AuthContextValue {
@@ -50,6 +51,9 @@ export const AuthContextProvider = ({
         const user = userCredential.user;
         const token = await user.getIdToken();
         sessionStorage.setItem("Token", token);
+        if (user) {
+          createUser(user);
+        }
         await updateProfile(user, {
           displayName: username,
         });
@@ -68,6 +72,9 @@ export const AuthContextProvider = ({
       // Signed in
       const user = userCredential.user;
       const token = await user.getIdToken();
+      if (user) {
+        createUser(user);
+      }
       sessionStorage.setItem("Token", token);
     });
   };

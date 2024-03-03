@@ -5,49 +5,67 @@
 //   addStudentToClassroom,
 // } from "../../../utils/classroom/createClassroom";
 import { useEffect, useState } from "react";
-
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import Image from "next/image";
-import { Delete } from "@/components/buttons/deleteButton";
 import { CreateClassroom } from "@/components/classroom/createClassroom";
 import DisplayClassroomLists from "@/components/classroom/displayClassroomLists";
 import DisplayClassroomInfo from "@/components/classroom/displayClassroomInfo";
-import { auth } from "@/firebase/config";
-import { readData } from "@/firebase/crud";
 import { useRouter } from "next/navigation";
+import { UserAuth } from "@/app/context/firebaseContext";
+import { readData } from "@/firebase/crud";
 
 type Props = {};
 
 export default function Classroom({}: Props) {
   const router = useRouter();
 
-  const user = auth?.currentUser;
+  const user = UserAuth().user;
   const userId = user?.uid;
+
+  const [classroomListData, setClassroomListData] = useState<[]>([]);
+  const [classroomInfoData, setClassroomInfoData] = useState<[]>([]);
+  const [selectedClassroom, setSelectedClassroom] = useState<string>("");
+  const [isCreated, setIsCreated] = useState<boolean>(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    if (!token && !userId) {
+      console.log("No user is signed in.");
       router.push("/login");
     }
 
     // fetch classroom list data
-    const fetchData = async () => {
-      try {
-        const res = await readData("classrooms", "userId", userId);
+    async function fetchData(userId: string) {
+      await readData("classrooms", "teacherId", userId).then((res) => {
         setClassroomListData(res);
-      } catch (error) {
-        console.error("Error fetching classroom list data:", error);
-      }
-    };
-    fetchData();
-    console.log("from client", userId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      });
+    }
 
-  const [classroomListData, setClassroomListData] = useState([]);
-  const [classroomInfodata, setClassroomInfoData] = useState([]);
+    fetchData(userId!);
+
+    console.log("from client", userId);
+  }, [router, userId]);
+
+  useEffect(() => {
+    async function fetchData(userId: string) {
+      if (isCreated && userId) {
+        await readData("classrooms", "teacherId", userId).then((res) => {
+          setClassroomListData(res);
+        });
+      }
+      setIsCreated(false);
+    }
+
+    fetchData(userId!);
+  }, [isCreated, userId]);
+
+  // ! This function is for testing purposes only
+  const handleClassroomClick = (classroomId: string) => {
+    // Set the selected classroom
+    setSelectedClassroom(classroomId);
+    console.log("Selected classroom:", classroomId);
+    readData("students", "classroomId", userId).then((res) => {
+      setClassroomInfoData(res);
+    });
+  };
 
   // const [classroomId, setClassroomId] = useState("");
   // const [studentData, setStudentData] = useState<{
@@ -72,12 +90,18 @@ export default function Classroom({}: Props) {
     <main>
       <div className="flex justify-between items-center mx-10 my-5">
         <h3>Classroom Panel</h3>
-        <CreateClassroom />
+        <CreateClassroom setIsCreated={setIsCreated} />
       </div>
-      <div className="flex w-full h-full">
-        <DisplayClassroomLists classroomListData={classroomListData} />
+      <div className="flex">
+        <DisplayClassroomLists
+          classroomListData={classroomListData}
+          onSelectClassroom={handleClassroomClick}
+        />
         <div className="w-full h-full">
-          <DisplayClassroomInfo />
+          <DisplayClassroomInfo
+            classroomInfoData={classroomInfoData}
+            selectedClassroom={selectedClassroom}
+          />
         </div>
       </div>
     </main>

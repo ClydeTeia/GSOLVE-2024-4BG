@@ -1,15 +1,32 @@
 import { Separator } from "@radix-ui/react-separator";
-import React from "react";
-import { studentData } from "@/data/classroom/studentList";
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import AddStudentButton from "./addStudentsToClass";
 
-type Props = {};
+interface StudentList {
+  id: number;
+  name: string;
+  email: string;
+}
 
-export default function DisplayClassroomInfo({}: Props) {
+interface Props {
+  classroomInfoData: StudentList[];
+  selectedClassroom: string;
+}
+
+export default function DisplayClassroomInfo({
+  classroomInfoData,
+  selectedClassroom,
+}: Props) {
   return (
     <div className="flex flex-col w-full h-full">
-      <h3>Classroom Info:</h3>
+      <div className="flex justify-between mr-14">
+        <h3>Classroom Info:</h3>
+        <AddStudentButton classroomId={selectedClassroom} />
+      </div>
+
       <div className="w-full h-full">
-        {studentData.map((student) => {
+        {classroomInfoData.map((student: StudentList) => {
           return (
             <div key={student.id}>
               <div>{student.name}</div>
