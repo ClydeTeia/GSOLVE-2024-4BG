@@ -91,7 +91,8 @@ export default function Classroom({ }: Props) {
       console.log(res);
       setClassroomInfoData(res);
     });
-  }, [isStudentAdded]);
+    setIsStudentAdded(false);
+  }, [isStudentAdded, selectedClassroom]);
 
   useEffect(() => {
     if (!selectedClassroom) return;
