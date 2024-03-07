@@ -4,7 +4,6 @@ import { addDoc, collection } from "firebase/firestore";
 type ClassroomData = {
   name: string;
   teacherID: string;
-  students: string[];
 };
 
 type StudentData = {

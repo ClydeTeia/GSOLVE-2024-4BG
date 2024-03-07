@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { GestureRecognizer, FilesetResolver } from "@mediapipe/tasks-vision";
 import Webcam from "react-webcam";
-import { asl_vocabulary } from "../../../utils/samples/typeraceWords";
+import { asl_vocabulary } from "../../data/samples/typeraceWords";
 
 const Gesture: React.FC = () => {
   type RunningMode = "IMAGE" | "VIDEO";

@@ -1,79 +1,53 @@
 import { Separator } from "@radix-ui/react-separator";
-import React from "react";
+import AddStudentButton from "./addStudentsToClass";
 
-const studentData = [
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-  {
-    name: "John Doe",
-    email: "jondoe@gmail.com",
-  },
-  {
-    name: "Jane Doe",
-    email: "ndoe@gmail.com",
-  },
-  {
-    name: "John Smith",
-    email: "johnsmith@gmail.com",
-  },
-];
+interface StudentList {
+  id: number;
+  name: string;
+  email: string;
+}
 
-type Props = {};
+interface Props {
+  classroomInfoData: StudentList[];
+  selectedClassroom: string;
+  setIsStudentAdded: any;
+}
 
-export default function DisplayClassroomInfo({}: Props) {
+interface Props {
+  classroomInfoData: StudentList[];
+  selectedClassroom: string;
+  setIsStudentAdded: any;
+}
+
+export default function DisplayClassroomInfo({
+  classroomInfoData,
+  selectedClassroom,
+  setIsStudentAdded,
+}: Props) {
+  // useEffect(() => {
+  //   console.log("Classroom Info:", selectedClassroom);
+
+  //   // fetch classroom info data
+  //   readData("classrooms", `${selectedClassroom}`, "students").then((res) => {
+  //     console.log(res);
+  //     setClassroomInfoData(res);
+  //   });
+  // }, [selectedClassroom]);
+
   return (
     <div className="flex flex-col w-full h-full">
-      <h3>Classroom Info:</h3>
+      <div className="flex justify-between mr-14">
+        <h3>Classroom Info:</h3>
+        <AddStudentButton
+          classroomId={selectedClassroom}
+          setIsStudentAdded={setIsStudentAdded}
+        />
+      </div>
+
       <div className="w-full h-full">
-        {studentData.map((student) => {
+        {classroomInfoData.map((student: StudentList) => {
           return (
-            <div key={student.name}>
+            <div key={student.id}>
               <div>{student.name}</div>
               <div>{student.email}</div>
               <Separator className="h-10" />

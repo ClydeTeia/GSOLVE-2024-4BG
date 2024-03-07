@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "visionx-413000"
-  }
+    "default": "gsolve-d8467",
+    "Gsolve": "gsolve-d8467",
+    "VisionX": "visionx-413000"
+  },
+  "targets": {},
+  "etags": {}
 }
