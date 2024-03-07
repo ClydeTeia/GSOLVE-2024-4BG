@@ -12,11 +12,12 @@ import { useRouter } from "next/navigation";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { readData } from "@/firebase/crud";
 import { getStudentClassroomInfo } from "../../../utils/classroom/getStudentClassroomInfo";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { DocumentData, collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { db, auth } from "@/firebase/config";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
+import { User } from "firebase/auth";
 
 type Props = {};
 
@@ -26,7 +27,7 @@ export default function Classroom({}: Props) {
   const user = UserAuth().user;
   const userId = user?.uid;
 
-  const [classroomListData, setClassroomListData] = useState<[]>([]);
+  const [classroomListData, setClassroomListData] = useState<any[]>([]);
   const [classroomInfoData, setClassroomInfoData] = useState<[]>([]);
   const [selectedClassroom, setSelectedClassroom] = useState<string>("");
   const [isClassCreated, setIsClassCreated] = useState<boolean>(false);
@@ -50,6 +51,32 @@ export default function Classroom({}: Props) {
       });
     }
 
+    async function fetchStudentClassrooms(user: DocumentData) {
+      try {
+        console.log(user, 'skjskj')
+        const q = query(collection(db, "classrooms"), where("students", "array-contains", {
+          email: user.email,
+          id: user.userId,
+          role: "student",
+          userId: user.userId,
+          username: user.username
+        }));
+
+        const querySnapshot = await getDocs(q);
+
+        const studentClassrooms: any[] = [];
+        querySnapshot.forEach((doc) => {
+          const classroomData = doc.data();
+          studentClassrooms.push(classroomData);
+        });
+
+        setClassroomListData(studentClassrooms);
+        console.log(studentClassrooms, 'hi');
+      } catch (error) {
+        console.error("Error fetching student classrooms:", error);
+      }
+    }
+
     const fetchUserRole = async () => {
       try {
         // Get the user's data from Cloud Firestore
@@ -59,7 +86,10 @@ export default function Classroom({}: Props) {
           // User data exists, retrieve the role
           const userData = userDoc.data();
           setUserRole(userData.role);
-          console.log("role is", userData.role);
+          console.log('role is', userData)
+          if (userData.role === 'student') {
+            fetchStudentClassrooms(userData);
+          }
         } else {
           setUserRole(null);
         }
@@ -145,13 +175,10 @@ export default function Classroom({}: Props) {
 
   if (!userRole) {
     return (
-      <main>
-        <div>
-          Select User Role
-          <RadioGroup
-            defaultValue="student"
-            onValueChange={(value) => setSelectedRole(value)}
-          >
+      <main className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <p>Select User Role</p>
+          <RadioGroup defaultValue="student" onValueChange={(value) => setSelectedRole(value)}>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="student" id="r1" />
               <Label htmlFor="r1">Student</Label>
@@ -161,9 +188,11 @@ export default function Classroom({}: Props) {
               <Label htmlFor="r2">Teacher</Label>
             </div>
           </RadioGroup>
+          <br />
           <Button onClick={handleRoleSubmit}>Submit Role</Button>
         </div>
       </main>
+
     );
   } else if (userRole === "teacher") {
     return (
@@ -190,7 +219,22 @@ export default function Classroom({}: Props) {
   } else {
     return (
       <main>
-        <div>u a student</div>
+        <div>
+          {/* Displaying all the classrooms a student is in */}
+          <h3>Your Classrooms</h3>
+          <DisplayClassroomLists
+            classroomListData={classroomListData}
+            onSelectClassroom={handleClassroomClick}
+          />
+          <div className="w-full h-full">
+            {/* Displaying detailed information about the selected classroom */}
+            <DisplayClassroomInfo
+              classroomInfoData={classroomInfoData}
+              selectedClassroom={selectedClassroom}
+              setIsStudentAdded={setIsStudentAdded}
+            />
+          </div>
+        </div>
       </main>
     );
   }
