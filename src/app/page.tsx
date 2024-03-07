@@ -23,7 +23,7 @@ export default function Home() {
   
   return (
     <main className="p-2">
-      <h1>Home Page</h1>
+      <h1>Get Started</h1>
       <div>hello</div>
       <div></div>
     </main>
