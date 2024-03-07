@@ -14,6 +14,8 @@ import { Separator } from "@radix-ui/react-separator";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { toast } from "sonner";
 import { AddStudentToClassroom } from "../../../utils/classroom/addStudentToClassroom";
+import { db } from "@/firebase/config";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 export default function AddStudentButton({
   classroomId,
@@ -27,8 +29,15 @@ export default function AddStudentButton({
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const usersData = await readAllData("users");
-        console.log(usersData);
+        const usersRef = collection(db, "users");
+        const usersQuery = query(usersRef, where("role", "==", "student"));
+        const querySnapshot = await getDocs(usersQuery);
+
+        const usersData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
         setStudents(usersData);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -36,7 +45,8 @@ export default function AddStudentButton({
     };
 
     fetchUsers();
-  }, []);
+  }, [classroomId, setIsStudentAdded]);
+
 
   if (!classroomId) {
     return null;
