@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 
 type Props = {};
 
-export default function Classroom({ }: Props) {
+export default function Classroom({}: Props) {
   const router = useRouter();
 
   const user = UserAuth().user;
@@ -35,8 +35,10 @@ export default function Classroom({ }: Props) {
   const [selectedRole, setSelectedRole] = useState<string>("student");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token && !userId) {
+    "use client";
+    const token = localStorage.getItem("Token");
+
+    if (!token) {
       console.log("No user is signed in.");
       router.push("/login");
     }
@@ -57,7 +59,7 @@ export default function Classroom({ }: Props) {
           // User data exists, retrieve the role
           const userData = userDoc.data();
           setUserRole(userData.role);
-          console.log('role is', userData.role)
+          console.log("role is", userData.role);
         } else {
           setUserRole(null);
         }
@@ -117,7 +119,7 @@ export default function Classroom({ }: Props) {
 
   const handleRoleSubmit = async () => {
     try {
-      console.log(selectedRole)
+      console.log(selectedRole);
       // Update the user's role in Firestore
       await setDoc(doc(db, "users", user!.uid), {
         email: user?.email,
@@ -138,7 +140,7 @@ export default function Classroom({ }: Props) {
       <main>
         <div>Loading... please wait</div>
       </main>
-    )
+    );
   }
 
   if (!userRole) {
@@ -146,7 +148,10 @@ export default function Classroom({ }: Props) {
       <main>
         <div>
           Select User Role
-          <RadioGroup defaultValue="student" onValueChange={(value) => setSelectedRole(value)}>
+          <RadioGroup
+            defaultValue="student"
+            onValueChange={(value) => setSelectedRole(value)}
+          >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="student" id="r1" />
               <Label htmlFor="r1">Student</Label>
@@ -160,7 +165,7 @@ export default function Classroom({ }: Props) {
         </div>
       </main>
     );
-  } else if (userRole === 'teacher') {
+  } else if (userRole === "teacher") {
     return (
       <main>
         <div className="flex justify-between items-center mx-10 my-5">
@@ -185,10 +190,8 @@ export default function Classroom({ }: Props) {
   } else {
     return (
       <main>
-        <div>
-          u a student
-        </div>
+        <div>u a student</div>
       </main>
-    )
+    );
   }
 }

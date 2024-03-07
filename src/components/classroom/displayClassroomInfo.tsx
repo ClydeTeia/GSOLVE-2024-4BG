@@ -1,9 +1,5 @@
 import { Separator } from "@radix-ui/react-separator";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
 import AddStudentButton from "./addStudentsToClass";
-import { read } from "fs";
-import { readData } from "@/firebase/crud";
 
 interface StudentList {
   id: number;

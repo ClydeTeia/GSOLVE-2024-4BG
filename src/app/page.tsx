@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { createData, readData, updateData, deleteData } from "@/firebase/crud";
-import { auth } from '@/firebase/config';
+import { auth } from "@/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { UserAuth } from './context/firebaseContext';
+import { UserAuth } from "./context/firebaseContext";
 
 export default function Home() {
   // CRUD TESTS
@@ -20,7 +20,7 @@ export default function Home() {
 
   // await deleteData("code","new","222")
   // const router = useRouter();
-  
+
   return (
     <main className="p-2">
       <h1>Home Page</h1>

@@ -24,8 +24,6 @@ export const auth = getAuth(app);
 export let userId = "";
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/auth.user
     console.log(user.uid);
     userId = user.uid;
   } else {

@@ -50,7 +50,7 @@ export const AuthContextProvider = ({
         // Signed up
         const user = userCredential.user;
         const token = await user.getIdToken();
-        sessionStorage.setItem("Token", token);
+        localStorage.setItem("Token", token);
         if (user) {
           createUser(user);
         }
@@ -75,13 +75,13 @@ export const AuthContextProvider = ({
       if (user) {
         createUser(user);
       }
-      sessionStorage.setItem("Token", token);
+      localStorage.setItem("Token", token);
     });
   };
 
   const logOut = () => {
     signOut(auth).then(() => {
-      sessionStorage.removeItem("Token");
+      localStorage.removeItem("Token");
     });
     console.log(user?.displayName, "has logged out");
   };

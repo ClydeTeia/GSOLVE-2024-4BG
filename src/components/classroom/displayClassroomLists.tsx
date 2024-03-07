@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { classroomData } from "@/data/samples/classrooms";
 
 interface Classroom {
   id: string;
