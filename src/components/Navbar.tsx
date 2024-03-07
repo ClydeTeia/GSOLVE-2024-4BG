@@ -16,10 +16,7 @@ export default function Navbar() {
           <Link href="/">Home</Link>
         </li>
         <li className="p-2 cursor-pointer">
-          <Link href="/about">About</Link>
-        </li>
-        <li className="p-2 cursor-pointer">
-          <Link href="/profile">Profile</Link>
+          <Link href="/gesture">Gesture</Link>
         </li>
         <li className="p-2 cursor-pointer">
           <Link href="/classroom">Classroom</Link>
