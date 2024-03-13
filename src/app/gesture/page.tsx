@@ -52,6 +52,7 @@ const Gesture: React.FC = () => {
   useEffect(() => {
     setPageLoaded(true);
     randomWord();
+    // dont remove enableWebcam here, it is needed to only click the button once if removed you need to click it twice, which is bad
     enableWebcam();
   }, []);
 
