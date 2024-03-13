@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -20,9 +21,7 @@ const Gesture: React.FC = () => {
     useState<GestureRecognizer | null>(null);
   const [runningMode, setRunningMode] = useState<RunningMode>("VIDEO");
   const [webcamRunning, setWebcamRunning] = useState<boolean>(false);
-  const [categoryNameState, setCategoryNameState] = useState<string>("");
-  const [categoryScoreState, setCategoryScoreState] = useState<number>();
-
+  const [pageLoaded, setPageLoaded] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [recognizedLetter, setRecognizedLetter] = useState<string>("");
   const [recognizedText, setRecognizedText] = useState<string>("");
@@ -30,6 +29,8 @@ const Gesture: React.FC = () => {
   const aslVocabulary: string[] = asl_vocabulary;
 
   let animationFrameId: number;
+  let lastVideoTime = -1;
+  let webcamResults: any = undefined;
 
   async function createGestureRecognizer() {
     const vision = await FilesetResolver.forVisionTasks(
@@ -48,8 +49,16 @@ const Gesture: React.FC = () => {
     setGestureRecognizer(recognizer);
   }
 
-  let lastVideoTime = -1;
-  let webcamResults: any = undefined;
+  useEffect(() => {
+    setPageLoaded(true);
+    randomWord();
+    enableWebcam();
+  }, []);
+
+  useEffect(() => {
+    recognize();
+    console.log("-".repeat(10));
+  }, [recognizedLetter, textChallenge]);
 
   const PredictWebcam = async () => {
     if (webcamRef.current) {
@@ -84,8 +93,6 @@ const Gesture: React.FC = () => {
                   Number(webcamResults.gestures[0][0].score * 100).toFixed(2)
                 );
                 if (categoryScore > 60) {
-                  setCategoryNameState(categoryName);
-                  setCategoryScoreState(categoryScore);
                   setRecognizedLetter(categoryName);
                 }
               }
@@ -110,6 +117,7 @@ const Gesture: React.FC = () => {
   PredictWebcam();
 
   const enableWebcam = async () => {
+    await createGestureRecognizer();
     if (!gestureRecognizer) {
       return;
     }
@@ -183,33 +191,25 @@ const Gesture: React.FC = () => {
     return aslVocabulary[randomIndex];
   }
 
-  useEffect(() => {
-    randomWord();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    recognize();
-    console.log("-".repeat(10));
-  }, [recognizedLetter, recognizedLetter, textChallenge]);
-
   return (
     <div className="w-full h-screen bg-gray-800 flex flex-col items-center">
       <div className="w-72">
-        <button
-          id="webcamButton"
-          onClick={async () => {
-            await createGestureRecognizer();
-            await enableWebcam();
-          }}
-        >
-          Enable Webcam
-        </button>
+        {pageLoaded && (
+          <button
+            id="webcamButton"
+            onClick={async () => {
+              await enableWebcam();
+            }}
+          >
+            Enable Webcam
+          </button>
+        )}
 
         <button
           className="ml-10"
           onClick={() => {
             setTextChallenge(randomWord());
+            setRecognizedText("");
           }}
         >
           Skip
