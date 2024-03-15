@@ -63,7 +63,22 @@ export const AuthContextProvider = ({
   };
 
   const emailSignIn = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+
+      const user = auth.currentUser;
+
+      if (user) {
+        const token = await user.getIdToken();
+        localStorage.setItem("Token", token);
+        console.log("User ID Token:", token);
+      } else {
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      console.error("Sign-in error:", error);
+      throw error;
+    }
   };
 
   const googleSignIn = async () => {
