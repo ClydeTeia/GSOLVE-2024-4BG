@@ -5,7 +5,7 @@
 //   addStudentToClassroom,
 // } from "../../../utils/classroom/createClassroom";
 import { use, useEffect, useState } from "react";
-import { CreateClassroom } from "@/components/classroom/createClassroom";
+import { CreateClassroom } from "@/components/classroom/createClassroomV1";
 import DisplayClassroomLists from "@/components/classroom/displayClassroomLists";
 import DisplayClassroomInfo from "@/components/classroom/displayClassroomInfo";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import { User } from "firebase/auth";
+import TeacherClassroom from "@/components/classroom/teacher/teacherClassroom";
 
 type Props = {};
 
@@ -207,48 +208,8 @@ export default function Classroom({}: Props) {
       </main>
     );
   } else if (userRole === "teacher") {
-    return (
-      <main>
-        <div className="flex justify-between items-center mx-10 my-5">
-          <h3>Classroom Panel</h3>
-          <CreateClassroom setIsClassCreated={setIsClassCreated} />
-        </div>
-        <div className="flex">
-          <DisplayClassroomLists
-            classroomListData={classroomListData}
-            onSelectClassroom={handleClassroomClick}
-          />
-          <div className="w-full h-full">
-            <DisplayClassroomInfo
-              classroomInfoData={classroomInfoData}
-              selectedClassroom={selectedClassroom}
-              setIsStudentAdded={setIsStudentAdded}
-            />
-          </div>
-        </div>
-      </main>
-    );
+    return <TeacherClassroom />;
   } else {
-    return (
-      <main>
-        <div>
-          {/* Displaying all the classrooms a student is in */}
-          <h3>Your Classrooms</h3>
-          {/* Must create another one as classroom Id gets undefined as the Id is not teacherId as they are different because this is for students*/}
-          <DisplayClassroomLists
-            classroomListData={classroomListData}
-            onSelectClassroom={handleClassroomClick}
-          />
-          <div className="w-full h-full">
-            {/* Displaying detailed information about the selected classroom */}
-            <DisplayClassroomInfo
-              classroomInfoData={classroomInfoData}
-              selectedClassroom={selectedClassroom}
-              setIsStudentAdded={setIsStudentAdded}
-            />
-          </div>
-        </div>
-      </main>
-    );
+    return <main></main>;
   }
 }

@@ -36,7 +36,7 @@ function DisplayClassroomLists({
           }}
         >
           <Button className="flex flex-row w-full rounded-none">
-            <h3>{classroom.name}</h3>
+            <h3>{classroom.name} {classroom.id}</h3>
           </Button>
           <Separator />
         </div>
