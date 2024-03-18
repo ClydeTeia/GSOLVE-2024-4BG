@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { AuthContextProvider } from "./context/firebaseContext";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,11 +28,11 @@ export default function RootLayout({
             <div className="h-16">
               <Navbar />
             </div>
-
-            <div className={`flex-grow ${mainContentHeight}`}>{children}</div>
-
-            <Toaster />
+            <div className={`flex-grow ${mainContentHeight}`}>
+              {children} 
+            </div>
           </div>
+          <Toaster />
         </AuthContextProvider>
       </body>
     </html>

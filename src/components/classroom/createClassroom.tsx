@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -35,7 +36,7 @@ const classroomSchema = z.object({
     .max(250, { message: "Maximum is 250" }),
 });
 
-function CreateClassroom({}: Props) {
+function CreateClassroom({ }: Props) {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -138,7 +139,9 @@ function CreateClassroom({}: Props) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <DialogClose asChild>
+              <Button type="submit">Save changes</Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>
