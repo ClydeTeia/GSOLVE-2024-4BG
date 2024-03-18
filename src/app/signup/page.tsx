@@ -60,7 +60,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="text-sm h-screen flex flex-col items-center justify-center">
+    <div className="text-sm h-full flex flex-col items-center justify-center">
       <h1 className="text-2xl mb-3">Sign Up now!</h1>
       <Form {...form}>
         <form

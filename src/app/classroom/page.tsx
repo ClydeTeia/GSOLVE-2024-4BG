@@ -176,7 +176,7 @@ export default function Classroom({}: Props) {
 
   if (userRole === "loading") {
     return (
-      <main className="flex items-center justify-center h-screen">
+      <main className="flex items-center justify-center h-full">
         <div>Loading... please wait</div>
       </main>
     );
@@ -184,7 +184,7 @@ export default function Classroom({}: Props) {
 
   if (!userRole) {
     return (
-      <main className="flex items-center justify-center h-screen">
+      <main className="flex items-center justify-center h-full">
         <div className="text-center">
           <p>Select User Role</p>
           <RadioGroup
