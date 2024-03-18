@@ -2,7 +2,7 @@ import { createData, readData } from "@/firebase/crud";
 import { User } from "firebase/auth";
 
 export async function createUser(user: User) {
-  const userId = user?.uid;
+  const userId = user?.uid
 
   // Check if user with the same ID already exists
   const existingUser = await readData("users", "userId", userId);

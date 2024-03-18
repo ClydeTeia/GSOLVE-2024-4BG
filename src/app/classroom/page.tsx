@@ -5,19 +5,29 @@
 //   addStudentToClassroom,
 // } from "../../../utils/classroom/createClassroom";
 import { use, useEffect, useState } from "react";
-import { CreateClassroom } from "@/components/classroom/createClassroom";
+import { CreateClassroom } from "@/components/classroom/createClassroomV1";
 import DisplayClassroomLists from "@/components/classroom/displayClassroomLists";
 import DisplayClassroomInfo from "@/components/classroom/displayClassroomInfo";
 import { useRouter } from "next/navigation";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { readData } from "@/firebase/crud";
 import { getStudentClassroomInfo } from "../../../utils/classroom/getStudentClassroomInfo";
-import { DocumentData, collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
+import {
+  DocumentData,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { db, auth } from "@/firebase/config";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import { User } from "firebase/auth";
+import TeacherClassroom from "@/components/classroom/teacher/teacherClassroom";
 
 type Props = {};
 
@@ -53,14 +63,17 @@ export default function Classroom({}: Props) {
 
     async function fetchStudentClassrooms(user: DocumentData) {
       try {
-        console.log(user, 'skjskj')
-        const q = query(collection(db, "classrooms"), where("students", "array-contains", {
-          email: user.email,
-          id: user.userId,
-          role: "student",
-          userId: user.userId,
-          username: user.username
-        }));
+        console.log(user, "skjskj");
+        const q = query(
+          collection(db, "classrooms"),
+          where("students", "array-contains", {
+            email: user.email,
+            id: user.userId,
+            role: "student",
+            userId: user.userId,
+            username: user.username,
+          })
+        );
 
         const querySnapshot = await getDocs(q);
 
@@ -71,7 +84,7 @@ export default function Classroom({}: Props) {
         });
 
         setClassroomListData(studentClassrooms);
-        console.log(studentClassrooms, 'hi');
+        console.log(studentClassrooms, "hi");
       } catch (error) {
         console.error("Error fetching student classrooms:", error);
       }
@@ -86,8 +99,8 @@ export default function Classroom({}: Props) {
           // User data exists, retrieve the role
           const userData = userDoc.data();
           setUserRole(userData.role);
-          console.log('role is', userData)
-          if (userData.role === 'student') {
+          console.log("role is", userData);
+          if (userData.role === "student") {
             fetchStudentClassrooms(userData);
           }
         } else {
@@ -118,33 +131,31 @@ export default function Classroom({}: Props) {
   }, [isClassCreated, userId]);
 
   useEffect(() => {
+    if (!isStudentAdded) return;
     if (!selectedClassroom) return;
-    const res = getStudentClassroomInfo(selectedClassroom).then((res) => {
-      console.log(res);
-      setClassroomInfoData(res);
-    });
-    setIsStudentAdded(false);
+    async function fetchData() {
+      const res = await getStudentClassroomInfo(selectedClassroom).then(
+        (res) => {
+          console.log(res);
+          setClassroomInfoData(res);
+        }
+      );
+      setIsStudentAdded(false);
+    }
+    fetchData();
   }, [isStudentAdded, selectedClassroom]);
-
-  useEffect(() => {
-    if (!selectedClassroom) return;
-    const res = getStudentClassroomInfo(selectedClassroom).then((res) => {
-      console.log(res);
-      setClassroomInfoData(res);
-    });
-    console.log("Selected Classroom", selectedClassroom);
-  }, [selectedClassroom]);
 
   const handleClassroomClick = async (classroomId: string) => {
     // Set the selected classroom
     setSelectedClassroom(classroomId);
     console.log("Selected classroom:", classroomId);
-
-    const res = getStudentClassroomInfo(classroomId).then((res) => {
-      console.log(res);
-      setClassroomInfoData(res);
-    });
-    console.log("Classroom Info:", res);
+    async function fetchData() {
+      const res = await getStudentClassroomInfo(classroomId).then((res) => {
+        console.log(res);
+        setClassroomInfoData(res);
+      });
+    }
+    fetchData();
   };
 
   const handleRoleSubmit = async () => {
@@ -178,7 +189,10 @@ export default function Classroom({}: Props) {
       <main className="flex items-center justify-center h-screen">
         <div className="text-center">
           <p>Select User Role</p>
-          <RadioGroup defaultValue="student" onValueChange={(value) => setSelectedRole(value)}>
+          <RadioGroup
+            defaultValue="student"
+            onValueChange={(value) => setSelectedRole(value)}
+          >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="student" id="r1" />
               <Label htmlFor="r1">Student</Label>
@@ -192,50 +206,10 @@ export default function Classroom({}: Props) {
           <Button onClick={handleRoleSubmit}>Submit Role</Button>
         </div>
       </main>
-
     );
   } else if (userRole === "teacher") {
-    return (
-      <main>
-        <div className="flex justify-between items-center mx-10 my-5">
-          <h3>Classroom Panel</h3>
-          <CreateClassroom setIsClassCreated={setIsClassCreated} />
-        </div>
-        <div className="flex">
-          <DisplayClassroomLists
-            classroomListData={classroomListData}
-            onSelectClassroom={handleClassroomClick}
-          />
-          <div className="w-full h-full">
-            <DisplayClassroomInfo
-              classroomInfoData={classroomInfoData}
-              selectedClassroom={selectedClassroom}
-              setIsStudentAdded={setIsStudentAdded}
-            />
-          </div>
-        </div>
-      </main>
-    );
+    return <TeacherClassroom />;
   } else {
-    return (
-      <main>
-        <div>
-          {/* Displaying all the classrooms a student is in */}
-          <h3>Your Classrooms</h3>
-          <DisplayClassroomLists
-            classroomListData={classroomListData}
-            onSelectClassroom={handleClassroomClick}
-          />
-          <div className="w-full h-full">
-            {/* Displaying detailed information about the selected classroom */}
-            <DisplayClassroomInfo
-              classroomInfoData={classroomInfoData}
-              selectedClassroom={selectedClassroom}
-              setIsStudentAdded={setIsStudentAdded}
-            />
-          </div>
-        </div>
-      </main>
-    );
+    return <main></main>;
   }
 }
