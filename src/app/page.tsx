@@ -19,7 +19,7 @@ export default function Home() {
   // const router = useRouter();
 
   return (
-    <main className="flex items-center justify-center bg-dot-black/[0.2] h-screen  p-2">
+    <main className="flex h-full items-center justify-center bg-dot-black/[0.2] p-2">
       <div className="mx-auto text-center max-w-md">
         <h2 className="text-2xl font-bold mb-4">
           Welcome to Signify: Your Gateway to Inclusive ASL Alphabet Learning!

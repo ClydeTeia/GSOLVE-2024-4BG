@@ -189,7 +189,7 @@ const Gesture: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-screen bg-white bg-dot-black/[0.1] flex flex-col items-center">
+    <div className="w-full h-full bg-white bg-dot-black/[0.1] flex flex-col items-center">
       {!hasStarted ? (
         <Start
           textChallenge={textChallenge}

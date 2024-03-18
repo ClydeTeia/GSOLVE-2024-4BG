@@ -17,13 +17,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const navbarHeight = 16;
+  const mainContentHeight = `calc(100vh - ${navbarHeight}px)`;
+
   return (
     <html lang="en" className="light">
       <body className={inter.className}>
         <AuthContextProvider>
-          <Navbar />
-          {children}
-          <Toaster />
+          <div className="h-screen flex flex-col">
+            <div className="h-16">
+              <Navbar />
+            </div>
+
+            <div className={`flex-grow ${mainContentHeight}`}>{children}</div>
+
+            <Toaster />
+          </div>
         </AuthContextProvider>
       </body>
     </html>

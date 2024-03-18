@@ -15,7 +15,7 @@ const Start: FC<startProps> = ({
   enableWebcam,
 }) => {
   return (
-    <div className="w-3/5 h-3/5 m-auto  text-center">
+    <div className="w-3/5 h-3/5 m-auto text-center">
       <h3 className="text-4xl text-gray-600"> Spell </h3>
       <h3 className="text-7xl font-bold mt-4 text-green-700">
         {textChallenge}

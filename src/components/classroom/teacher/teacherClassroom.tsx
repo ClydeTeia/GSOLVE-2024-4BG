@@ -15,7 +15,7 @@ type Props = {};
 
 function TeacherClassroom({}: Props) {
   return (
-    <main className=" bg-[#E8F3F1] w-full h-screen">
+    <main className=" bg-[#E8F3F1] w-full h-full">
       <div className="h-full w-full">
         <div className="bg-white p-12 h-1/4 flex items-center">
           <CreateClassroom />
