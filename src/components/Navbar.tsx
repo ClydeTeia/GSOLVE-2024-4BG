@@ -31,8 +31,10 @@ export default function Navbar() {
             <Button
               variant={"destructive"}
               onClick={() => {
-                logOut();
                 router.push("/");
+                setTimeout(() => {
+                  logOut();
+                }, 600);
               }}
             >
               Sign Out

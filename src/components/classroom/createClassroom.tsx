@@ -22,6 +22,7 @@ import { z } from "zod";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { Timestamp } from "firebase/firestore";
 import { useToast } from "@/components/ui/use-toast";
+import { generateRandomString } from '../../../utils/generateLink'
 
 type Props = {};
 
@@ -72,6 +73,7 @@ function CreateClassroom({ }: Props) {
       ...validationResult.data,
       teacherId: creatorId,
       createdAt: Timestamp.now(),
+      link: generateRandomString(8)
     };
 
     console.log(objectData);
