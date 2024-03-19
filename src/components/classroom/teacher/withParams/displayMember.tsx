@@ -4,11 +4,6 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { toast } from "sonner";
 
-type MemberProp = {
-  id: string;
-  name: string;
-};
-
 type Props = {
   params: string;
   membersData: MemberProp[] | null;

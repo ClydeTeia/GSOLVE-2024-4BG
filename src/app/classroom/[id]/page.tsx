@@ -7,29 +7,34 @@ import { useEffect, useState } from "react";
 import { CreateChallengeButton } from "@/components/classroom/createChallenge";
 import { useRouter } from "next/navigation";
 import DisplayMember from "@/components/classroom/teacher/withParams/displayMember";
+import DisplayChallenges from "@/components/classroom/teacher/withParams/displayChallenges";
 
-const challenges = [];
+// change this to the commented ones for testing
+const challengesData: ChallengeProp[] | null = null;
+// [
+//   {
+//     id: 1,
+//     name: "ASL For Everyone",
+//   },
+// ];
 
-type MemberProp = {
-  id: string;
-  name: string;
-};
-
+// change this to the commented ones for testing
 const membersData: MemberProp[] | null = null;
 // [
-// {
-//   id: "unique-id",
-//   name: "Ian",
-// },
-// {
-//   id: "unique-id1",
-//   name: "Yoo",
-// },
-// {
-//   id: "unique-id2",
-//   name: "Chad",
-// },
+//  {
+//    id: "unique-id",
+//    name: "Ian",
+//  },
+//  {
+//    id: "unique-id1",
+//    name: "Yoo",
+//  },
+//  {
+//    id: "unique-id2",
+//    name: "Chad",
+//  },
 // ]
+
 type Props = {
   params: {
     id: string;
@@ -107,28 +112,13 @@ export default function UniqueClassroom({ params }: Props) {
         <div className="flex">
           <div className="md:w-3/5 w-full  min-h-80">
             {isChallenge && (
-              <>
-                {/* You can change if it returns null */}
-
-                {challenges.length > 0 ? (
-                  <div>There are challenges</div>
-                ) : (
-                  <div className="text-center flex flex-col justify-center items-center w-full h-full gap-3">
-                    <div>No challenges available</div>
-                    <div>Create a challenge</div>
-                    <CreateChallengeButton />
-                  </div>
-                )}
-              </>
+              <DisplayChallenges challengesData={challengesData} />
             )}
             {isMember && (
-              <>
-                {/* You can change if it returns null */}
-                <DisplayMember params={params.id} membersData={membersData} />
-              </>
+              <DisplayMember params={params.id} membersData={membersData} />
             )}
           </div>
-          <div className="md:w-2/5 hidden md:block border">yo</div>
+          <div className="md:w-2/5 hidden md:block border">Link Tab</div>
         </div>
       </div>
     </main>
