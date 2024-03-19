@@ -28,14 +28,15 @@ type Props = {};
 //   },
 // ];
 
-interface ClassListType {
+export interface ClassListType {
   name: string;
   description: string;
   createdAt: string;
   teacherId: string;
+  link: string;
 }
 
-function TeacherClassList({}: Props) {
+function TeacherClassList({ }: Props) {
   const [classListData, setClassListData] = useState<ClassListType[]>([]);
 
   const user = UserAuth().user;
@@ -43,24 +44,21 @@ function TeacherClassList({}: Props) {
 
   useEffect(() => {
     async function fetchData() {
-      await fetchDataClassList();
+      console.log(userId);
+      try {
+        if (userId) {
+          const res = await readData("classrooms", "teacherId", user!.uid);
+          if (!res) throw Error;
+          console.log(res);
+          setClassListData(res);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
     fetchData();
-  }, []);
+  }, [user, userId]);
 
-  const fetchDataClassList = async () => {
-    console.log(userId);
-    try {
-      if (userId) {
-        const res = await readData("classrooms", "teacherId", user!.uid);
-        if (!res) throw Error;
-        console.log(res);
-        setClassListData(res);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   return (
     <div className="text-black grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2  gap-5">
@@ -90,7 +88,7 @@ function TeacherClassList({}: Props) {
               </div>
 
               <div>
-                <DropdownMenuButton />
+                <DropdownMenuButton classroom={classList} />
               </div>
             </div>
           </Button>

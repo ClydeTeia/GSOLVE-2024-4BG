@@ -10,10 +10,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DeleteBtn } from "./deleteClass";
 import { toast } from "sonner";
+import { ClassListType } from "./teacherClassList";
 
-export function DropdownMenuButton() {
+export function DropdownMenuButton({ classroom }: { classroom: ClassListType }) {
   const handleInviteClick = () => {
-    const inviteText = "Your invite text here";
+    const inviteText = `http://localhost:3000/classroom/join/${classroom.link}`;
+    console.log(inviteText)
     navigator.clipboard
       .writeText(inviteText)
       .then(() => {
@@ -40,9 +42,9 @@ export function DropdownMenuButton() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={handleInviteClick}>
-            Invite Link
+            Copy Invite Link
           </DropdownMenuItem>
-          <DeleteBtn />
+          <DeleteBtn classroom={classroom}/>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

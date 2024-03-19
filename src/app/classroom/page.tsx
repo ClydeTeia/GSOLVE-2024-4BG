@@ -35,10 +35,6 @@ export default function Classroom({}: Props) {
   const router = useRouter();
 
   const user = UserAuth().user;
-  if (!user) {
-    router.push("/login");
-  }
-  
   const userId = user?.uid;
 
   const [classroomListData, setClassroomListData] = useState<any[]>([]);
