@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Separator } from "../../ui/separator";
 import TeacherClassList from "./teacherClassList";

@@ -4,7 +4,7 @@
 //   createClassroom,
 //   addStudentToClassroom,
 // } from "../../../utils/classroom/createClassroom";
-import { use, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { CreateClassroom } from "@/components/classroom/createClassroomV1";
 import DisplayClassroomLists from "@/components/classroom/displayClassroomLists";
 import DisplayClassroomInfo from "@/components/classroom/displayClassroomInfo";
@@ -28,6 +28,8 @@ import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import { User } from "firebase/auth";
 import TeacherClassroom from "@/components/classroom/teacher/teacherClassroom";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 
 type Props = {};
 
@@ -176,8 +178,19 @@ export default function Classroom({}: Props) {
 
   if (userRole === "loading") {
     return (
-      <main className="flex items-center justify-center h-full">
-        <div>Loading... please wait</div>
+      <main className="flex w-full h-full flex-col">
+        <div className="h-1/4 py-5 px-12">
+          <Skeleton className="h-32 w-36 bg-[#D9D9D9]" />
+        </div>
+        <Separator className="bg-[#77baac]" />
+        <div className="h-3/4 w-full p-12 bg-[#E8F3F1]">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-5">
+            <Skeleton className="w-full h-32 bg-[#D9D9D9]" />
+            <Skeleton className="w-full h-32 bg-[#D9D9D9]" />
+            <Skeleton className="w-full h-32 bg-[#D9D9D9]" />
+            <Skeleton className="w-full h-32 bg-[#D9D9D9]" />
+          </div>
+        </div>
       </main>
     );
   }
