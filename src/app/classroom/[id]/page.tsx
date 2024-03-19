@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { CreateChallengeButton } from "@/components/classroom/createChallenge";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const challenges = [];
 
@@ -70,6 +71,19 @@ export default function UniqueClassroom({ params }: Props) {
     setIsMember(true);
   }
 
+  const handleInviteClick = () => {
+    const inviteText = `http://localhost:3000/classroom/join/${params.id}`;
+    console.log(inviteText);
+    navigator.clipboard
+      .writeText(inviteText)
+      .then(() => {
+        toast("Join link copied " + inviteText);
+      })
+      .catch((err) => {
+        console.error("Failed to copy:", err);
+      });
+  };
+
   return (
     <main className="flex h-full flex-col p-24 text-black">
       {/* Upper */}
@@ -129,7 +143,10 @@ export default function UniqueClassroom({ params }: Props) {
                     </div>
                   ))
                 ) : (
-                  <div>Share this link to add them!</div>
+                  <div>
+                    Share this link to add them!
+                    <Button onClick={handleInviteClick}></Button>
+                  </div>
                 )}
               </>
             )}

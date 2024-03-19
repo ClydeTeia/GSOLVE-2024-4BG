@@ -25,12 +25,13 @@ export function DropdownMenuButton({
     navigator.clipboard
       .writeText(inviteText)
       .then(() => {
-        toast("Join link copied " + "inviteText");
+        toast("Join link copied " + inviteText);
       })
       .catch((err) => {
         console.error("Failed to copy:", err);
       });
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
