@@ -6,30 +6,30 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { CreateChallengeButton } from "@/components/classroom/createChallenge";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import DisplayMember from "@/components/classroom/teacher/withParams/displayMember";
 
 const challenges = [];
 
-type memberProps = {
+type MemberProp = {
   id: string;
   name: string;
 };
 
-const members: memberProps[] = [
-  // {
-  //   id: "unique-id",
-  //   name: "Ian",
-  // },
-  // {
-  //   id: "unique-id1",
-  //   name: "Yoo",
-  // },
-  // {
-  //   id: "unique-id2",
-  //   name: "Chad",
-  // },
-];
-
+const membersData: MemberProp[] | null = null;
+// [
+// {
+//   id: "unique-id",
+//   name: "Ian",
+// },
+// {
+//   id: "unique-id1",
+//   name: "Yoo",
+// },
+// {
+//   id: "unique-id2",
+//   name: "Chad",
+// },
+// ]
 type Props = {
   params: {
     id: string;
@@ -37,6 +37,7 @@ type Props = {
 };
 
 export default function UniqueClassroom({ params }: Props) {
+  console.log("On class[id]" + params.id);
   const router = useRouter();
 
   useEffect(() => {
@@ -70,19 +71,6 @@ export default function UniqueClassroom({ params }: Props) {
     setIsChallenge(false);
     setIsMember(true);
   }
-
-  const handleInviteClick = () => {
-    const inviteText = `http://localhost:3000/classroom/join/${params.id}`;
-    console.log(inviteText);
-    navigator.clipboard
-      .writeText(inviteText)
-      .then(() => {
-        toast("Join link copied " + inviteText);
-      })
-      .catch((err) => {
-        console.error("Failed to copy:", err);
-      });
-  };
 
   return (
     <main className="flex h-full flex-col p-24 text-black">
@@ -136,18 +124,7 @@ export default function UniqueClassroom({ params }: Props) {
             {isMember && (
               <>
                 {/* You can change if it returns null */}
-                {members.length > 0 ? (
-                  members.map((member) => (
-                    <div key={member.id}>
-                      <p>{member.name}</p>
-                    </div>
-                  ))
-                ) : (
-                  <div>
-                    Share this link to add them!
-                    <Button onClick={handleInviteClick}></Button>
-                  </div>
-                )}
+                <DisplayMember params={params.id} membersData={membersData} />
               </>
             )}
           </div>
