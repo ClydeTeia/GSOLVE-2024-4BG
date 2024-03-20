@@ -28,6 +28,7 @@ import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import { User } from "firebase/auth";
 import TeacherClassroom from "@/components/classroom/teacher/teacherClassroom";
+import StudentView from "@/components/classroom/student/studentView";
 
 type Props = {};
 
@@ -208,6 +209,6 @@ export default function Classroom({}: Props) {
   } else if (userRole === "teacher") {
     return <TeacherClassroom />;
   } else {
-    return <main></main>;
+    return <StudentView />;
   }
 }
