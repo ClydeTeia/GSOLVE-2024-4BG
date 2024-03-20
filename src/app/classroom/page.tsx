@@ -5,9 +5,6 @@
 //   addStudentToClassroom,
 // } from "../../../utils/classroom/createClassroom";
 import { Suspense, useEffect, useState } from "react";
-import { CreateClassroom } from "@/components/classroom/createClassroomV1";
-import DisplayClassroomLists from "@/components/classroom/displayClassroomLists";
-import DisplayClassroomInfo from "@/components/classroom/displayClassroomInfo";
 import { useRouter } from "next/navigation";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { readData } from "@/firebase/crud";
@@ -22,11 +19,10 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
-import { db, auth } from "@/firebase/config";
+import { db } from "@/firebase/config";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
-import { User } from "firebase/auth";
 import TeacherClassroom from "@/components/classroom/teacher/teacherClassroom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
@@ -41,6 +37,7 @@ export default function Classroom({}: Props) {
 
   const [classroomListData, setClassroomListData] = useState<any[]>([]);
   const [classroomInfoData, setClassroomInfoData] = useState<[]>([]);
+
   const [selectedClassroom, setSelectedClassroom] = useState<string>("");
   const [isClassCreated, setIsClassCreated] = useState<boolean>(false);
   const [isStudentAdded, setIsStudentAdded] = useState<boolean>(false);

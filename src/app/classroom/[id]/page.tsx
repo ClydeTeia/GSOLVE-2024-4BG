@@ -8,6 +8,7 @@ import { CreateChallengeButton } from "@/components/classroom/createChallenge";
 import { useRouter } from "next/navigation";
 import DisplayMember from "@/components/classroom/teacher/withParams/displayMember";
 import DisplayChallenges from "@/components/classroom/teacher/withParams/displayChallenges";
+import ClassDetails from "@/components/classroom/teacher/withParams/classDetails";
 
 // change this to the commented ones for testing
 const challengesData: ChallengeProp[] | null = null;
@@ -78,12 +79,11 @@ export default function UniqueClassroom({ params }: Props) {
   }
 
   return (
-    <main className="flex h-full flex-col p-24 text-black">
+    <main className="flex h-full flex-col p-20 text-black">
       {/* Upper */}
       <div className="w-full ">
         <div className="flex ">
-          <div>Icon</div>
-          <div>Name</div>
+          <div>Class Name Here</div>
         </div>
         <div className="flex gap-1">
           <Button className="rounded-full">+</Button>
@@ -110,7 +110,7 @@ export default function UniqueClassroom({ params }: Props) {
         </div>
         <Separator className="mb-4 my-0.5" />
         <div className="flex">
-          <div className="md:w-3/5 w-full  min-h-80">
+          <div className="md:w-3/5 w-full  min-h-96">
             {isChallenge && (
               <DisplayChallenges challengesData={challengesData} />
             )}
@@ -118,7 +118,13 @@ export default function UniqueClassroom({ params }: Props) {
               <DisplayMember params={params.id} membersData={membersData} />
             )}
           </div>
-          <div className="md:w-2/5 hidden md:block border">Link Tab</div>
+          <div className="md:w-2/5 hidden md:block border">
+            <ClassDetails
+              params={params.id}
+              membersData={membersData}
+              challengesData={challengesData}
+            />
+          </div>
         </div>
       </div>
     </main>

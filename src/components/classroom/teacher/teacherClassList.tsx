@@ -36,7 +36,7 @@ export interface ClassListType {
   link: string;
 }
 
-function TeacherClassList({ }: Props) {
+function TeacherClassList({}: Props) {
   const [classListData, setClassListData] = useState<ClassListType[]>([]);
 
   const user = UserAuth().user;
@@ -59,7 +59,6 @@ function TeacherClassList({ }: Props) {
     fetchData();
   }, [user, userId]);
 
-
   return (
     <div className="text-black grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2  gap-5">
       {classListData &&
@@ -77,7 +76,7 @@ function TeacherClassList({ }: Props) {
               <div className="flex justify-center items-center gap-1">
                 <div>
                   <Image
-                    src={"/people.png"}
+                    src={"/icons/people.png"}
                     alt={"group icon"}
                     width={24}
                     height={24}

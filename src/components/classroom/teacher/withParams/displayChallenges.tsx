@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { CreateChallengeButton } from "../../createChallenge";
 
@@ -20,7 +22,7 @@ function DisplayChallenges({ challengesData }: Props) {
           <div key={challenge.id}>
             <div>{challenge.name}</div>
           </div>
-        ))}{" "}
+        ))}
     </div>
   );
 }
