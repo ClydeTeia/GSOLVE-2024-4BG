@@ -73,7 +73,7 @@ function CreateClassroom({ }: Props) {
       ...validationResult.data,
       teacherId: creatorId,
       createdAt: Timestamp.now(),
-      link: generateRandomString(8)
+      link: generateRandomString(12)
     };
 
     console.log(objectData);
