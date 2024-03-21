@@ -1,42 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { Button } from "./ui/button";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase/config";
-import { useState } from "react";
-
-export const colorVariants = {
-  none: 'text-black',
-  student: 'text-blue-500',
-  teacher: 'text-green-500'
-};
 
 export default function Navbar() {
-  const [role, setRole] = useState<"teacher" | "student" | "none">("none");
   const { user, logOut } = UserAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      try {
-        // Get the user's data from Cloud Firestore
-        const userDoc = await getDoc(doc(db, "users", user!.uid));
-
-        // User data exists, retrieve the role
-        const userData = userDoc.data();
-        console.log("role is", userData);
-        setRole(userData!.role)
-      } catch (error) {
-        console.error("Error fetching user role:", error);
-      }
-    };
-    fetchUserRole();
-  }, [user])
-
   return (
     <div className="block">
       <div className="h-16 w-full border-b-2 flex items-center justify-between px-5 p-2">
@@ -53,14 +25,9 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-        {user && role !== "none" ? (
+        {user ? (
           <ul className="flex">
-            <li className="p-2">
-              Hello, {' '}
-              <span className={`${colorVariants[role]}`}>
-                {user.displayName}
-              </span>
-            </li>
+            <li className="p-2">Hello {user.displayName}</li>
             <Button
               variant={"destructive"}
               onClick={() => {

@@ -15,7 +15,7 @@ function StudentClassroom({}: Props) {
       </div>
       <Separator />
       <div className="min-h-3/4 p-12">
-        <StudentClassList classrooms={classrooms} />
+        <StudentClassList />
       </div>
     </main>
   );
