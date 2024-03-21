@@ -60,7 +60,7 @@ function TeacherClassList({}: Props) {
   }, [user, userId]);
 
   return (
-    <div className="text-black grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2  gap-5">
+    <div className="text-black grid md:grid-cols-3 lg:grid-cols-5 grid-cols-2  gap-5">
       {classListData &&
         classListData.map((classList) => (
           <Button
