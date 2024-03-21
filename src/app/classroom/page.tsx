@@ -27,6 +27,7 @@ import TeacherClassroom from "@/components/classroom/teacher/teacherClassroom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import StudentClassroom from "@/components/classroom/student/studentClassroom";
+import { ClassListType } from "@/components/classroom/teacher/teacherClassList";
 
 type Props = {};
 
@@ -36,7 +37,7 @@ export default function Classroom({}: Props) {
   const user = UserAuth().user;
   const userId = user?.uid;
 
-  const [classroomListData, setClassroomListData] = useState<any[]>([]);
+  const [classroomListData, setClassroomListData] = useState<ClassListType[]>([]);
   const [classroomInfoData, setClassroomInfoData] = useState<[]>([]);
 
   const [selectedClassroom, setSelectedClassroom] = useState<string>("");
@@ -54,23 +55,13 @@ export default function Classroom({}: Props) {
       router.push("/login");
     }
 
-    // fetch classroom list data
-    async function fetchData(userId: string) {
-      await readData("classrooms", "teacherId", userId).then((res) => {
-        setClassroomListData(res);
-      });
-    }
-
     async function fetchStudentClassrooms(user: DocumentData) {
       try {
         const q = query(
           collection(db, "classrooms"),
           where("students", "array-contains", {
             email: user.email,
-            id: user.userId,
-            role: "student",
-            userId: user.userId,
-            username: user.username,
+            name: user.username,
           })
         );
 
@@ -110,8 +101,6 @@ export default function Classroom({}: Props) {
     };
     fetchUserRole();
 
-    fetchData(userId!);
-
     console.log("from client", userId);
   }, [router, user, userId]);
 
@@ -142,19 +131,6 @@ export default function Classroom({}: Props) {
     }
     fetchData();
   }, [isStudentAdded, selectedClassroom]);
-
-  const handleClassroomClick = async (classroomId: string) => {
-    // Set the selected classroom
-    setSelectedClassroom(classroomId);
-    console.log("Selected classroom:", classroomId);
-    async function fetchData() {
-      const res = await getStudentClassroomInfo(classroomId).then((res) => {
-        console.log(res);
-        setClassroomInfoData(res);
-      });
-    }
-    fetchData();
-  };
 
   const handleRoleSubmit = async () => {
     try {
@@ -217,6 +193,6 @@ export default function Classroom({}: Props) {
   } else if (userRole === "teacher") {
     return <TeacherClassroom />;
   } else if (userRole === "student") {
-    return <StudentClassroom />;
+    return <StudentClassroom classrooms={classroomListData} />;
   }
 }
