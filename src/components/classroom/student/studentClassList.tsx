@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Separator } from "@radix-ui/react-separator";
 import { DropdownMenuButton } from "../dropDownBtn";
-import { readData } from "@/firebase/crud";
-import { UserAuth } from "@/app/context/firebaseContext";
 import Link from "next/link";
 
 export interface ClassListType {
@@ -21,16 +19,19 @@ function StudentClassList({ classrooms }: { classrooms: ClassListType[] }) {
   return (
     <div className="text-black grid md:grid-cols-3 lg:grid-cols-5 grid-cols-2  gap-5">
       {classrooms &&
-        classrooms.map((classList) => (
+        classrooms.map((classroom) => (
           <Button
-            key={classList.createdAt}
+            key={classroom.createdAt}
             className="group hover:bg-[#77baac] bg-white text-black p-0 w-full h-32 flex flex-col border-[#77baac] border shadow-md"
           >
-            <Link href={`classroom/${classList.link}`}>
-              <div className="h-2/3 flex flex-col w-full justify-evenly items-center">
-                <p>{classList.name}</p>
-                <p className="text-xs">{classList.description}</p>
-              </div>{" "}
+            <Link
+              className="h-2/3 flex flex-col w-full justify-evenly items-center"
+              href={`classroom/${classroom.link}`}
+            >
+              <div className="">
+                <p>{classroom.name}</p>
+                <p className="text-xs">{classroom.description}</p>
+              </div>
             </Link>
             <Separator className="w-full h-0.5 bg-[#77baac]" />
             <div className="flex bg-white hover:bg-white  px-3 items-center h-1/3 text-center w-full flex-row justify-between rounded-b-md">
@@ -48,7 +49,7 @@ function StudentClassList({ classrooms }: { classrooms: ClassListType[] }) {
               </div>
 
               <div>
-                <DropdownMenuButton classroom={classList} />
+                <DropdownMenuButton classroom={classroom} />
               </div>
             </div>
           </Button>
