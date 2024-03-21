@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CreateChallengeButton } from "../../createChallenge";
+import { CreateChallengeButton } from "../createChallenge";
 
 type Props = {
   challengesData: ChallengeProp[] | null;

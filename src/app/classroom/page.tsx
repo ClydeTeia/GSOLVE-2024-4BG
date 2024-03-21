@@ -177,7 +177,7 @@ export default function Classroom({}: Props) {
   if (userRole === "loading") {
     return (
       <main className="flex w-full h-full flex-col">
-        <div className="h-1/4 py-5 px-12">
+        <div className="min-h-1/4 p-12">
           <Skeleton className="h-32 w-36 bg-[#D9D9D9]" />
         </div>
         <Separator className="bg-[#77baac]" />

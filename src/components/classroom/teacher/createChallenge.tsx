@@ -18,7 +18,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { z } from "zod";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { Timestamp } from "firebase/firestore";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "../../ui/use-toast";
 const challengeSchema = z.object({
   title: z.string().min(3, { message: "Title is required." }),
   challengeText: z.string().min(1, { message: "Challenge text is required." }),

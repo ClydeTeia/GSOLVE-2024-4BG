@@ -11,33 +11,33 @@ import Link from "next/link";
 
 type Props = {};
 
-const classListData = [
-  {
-    id: 1,
-    // teacherName?
-    createdAt: "asdasdas",
-    name: "ASL",
-    description: "For Begineers",
-    teacherId: "12309123",
-    link: "unique",
-  },
-  {
-    id: 2,
-    createdAt: "asdasdsaasdas",
-    name: "ASL 101",
-    description: "Basic ASL",
-    teacherId: "123512",
-    link: "uniqueasdas",
-  },
-  {
-    id: 3,
-    createdAt: "asdasasdasdsadas",
-    name: "Intermediate ASL",
-    description: "Grade 3 ASL",
-    teacherId: "hdgfhdf",
-    link: "jyrt324",
-  },
-];
+// const classListData = [
+//   {
+//     id: 1,
+//     // teacherName?
+//     createdAt: "asdasdas",
+//     name: "ASL",
+//     description: "For Begineers",
+//     teacherId: "12309123",
+//     link: "unique",
+//   },
+//   {
+//     id: 2,
+//     createdAt: "asdasdsaasdas",
+//     name: "ASL 101",
+//     description: "Basic ASL",
+//     teacherId: "123512",
+//     link: "uniqeasdas",
+//   },
+//   {
+//     id: 3,
+//     createdAt: "asdasasdasdsadas",
+//     name: "Intermediate ASL",
+//     description: "Grade 3 ASL",
+//     teacherId: "hdgfhdf",
+//     link: "jyrt324",
+//   },
+// ];
 
 export interface ClassListType {
   name: string;
@@ -48,41 +48,42 @@ export interface ClassListType {
 }
 
 function StudentClassList({}: Props) {
-  // const [classListData, setClassListData] = useState<ClassListType[]>([]);
+  const [classListData, setClassListData] = useState<ClassListType[]>([]);
 
-  // const user = UserAuth().user;
-  // const userId = user!.uid;
+  const user = UserAuth().user;
+  const userId = user!.uid;
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     console.log(userId);
-  //     try {
-  //       if (userId) {
-  //         const res = await readData("classrooms", "teacherId", user!.uid);
-  //         if (!res) throw Error;
-  //         console.log(res);
-  //         setClassListData(res);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   }
-  //   fetchData();
-  // }, [user, userId]);
+  useEffect(() => {
+    async function fetchData() {
+      console.log(userId);
+      try {
+        if (userId) {
+          const res = await readData("classrooms", "teacherId", user!.uid);
+          if (!res) throw Error;
+          console.log(res);
+          setClassListData(res);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData();
+  }, [user, userId]);
 
   return (
     <div className="text-black grid md:grid-cols-3 lg:grid-cols-5 grid-cols-2  gap-5">
       {classListData &&
         classListData.map((classList) => (
-          <Link
-            href={`classroom/${classList.link}`}
+          <Button
             key={classList.createdAt}
             className="group hover:bg-[#77baac] bg-white text-black p-0 w-full h-32 flex flex-col border-[#77baac] border shadow-md"
           >
-            <div className="h-2/3 flex flex-col w-full justify-evenly items-center">
-              <p>{classList.name}</p>
-              <p className="text-xs">{classList.description}</p>
-            </div>
+            <Link href={`classroom/${classList.link}`}>
+              <div className="h-2/3 flex flex-col w-full justify-evenly items-center">
+                <p>{classList.name}</p>
+                <p className="text-xs">{classList.description}</p>
+              </div>{" "}
+            </Link>
             <Separator className="w-full h-0.5 bg-[#77baac]" />
             <div className="flex bg-white hover:bg-white  px-3 items-center h-1/3 text-center w-full flex-row justify-between rounded-b-md">
               <div className="flex justify-center items-center gap-1">
@@ -102,7 +103,7 @@ function StudentClassList({}: Props) {
                 <DropdownMenuButton classroom={classList} />
               </div>
             </div>
-          </Link>
+          </Button>
         ))}
     </div>
   );

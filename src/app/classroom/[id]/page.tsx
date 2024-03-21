@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
-import { CreateChallengeButton } from "@/components/classroom/createChallenge";
+import { CreateChallengeButton } from "@/components/classroom/teacher/createChallenge";
 import { useRouter } from "next/navigation";
 import DisplayMember from "@/components/classroom/teacher/withParams/displayMember";
 import DisplayChallenges from "@/components/classroom/teacher/withParams/displayChallenges";
