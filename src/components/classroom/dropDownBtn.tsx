@@ -10,9 +10,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DeleteBtn } from "./deleteClass";
+import { DeleteBtn } from "./teacher/deleteClass";
 import { toast } from "sonner";
-import { ClassListType } from "./teacherClassList";
+import { ClassListType } from "./teacher/teacherClassList";
 
 export function DropdownMenuButton({
   classroom,

@@ -86,10 +86,9 @@ export default function UniqueClassroom({ params }: Props) {
           <div>Class Name Here</div>
         </div>
         <div className="flex gap-1">
-          <Button className="rounded-full">+</Button>
-          <Button className="rounded-full">?</Button>
-          <Button className="rounded-full">=</Button>
-          <Button className="rounded-full">%</Button>
+          <Button className="rounded-full">Add Challenge</Button>
+          <Button className="rounded-full">Edit</Button>
+          <Button className="rounded-full"></Button>
         </div>
       </div>
       {/* Bottom Half */}

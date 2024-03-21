@@ -1,14 +1,23 @@
-"use client"
+"use client";
 
-import React, { ChangeEvent, FormEvent, useState } from 'react'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore'
-import { db } from '@/firebase/config'
-import { UserAuth } from '@/app/context/firebaseContext'
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "@/firebase/config";
+import { UserAuth } from "@/app/context/firebaseContext";
 
-export default function StudentView() {
+export default function JoinTab() {
   const [link, setLink] = useState<string>("");
   const { user } = UserAuth();
 
@@ -19,13 +28,10 @@ export default function StudentView() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log('yes', user)
+    console.log("yes", user);
     try {
       // Query Firestore to find the classroom document with the provided link
-      const q = query(
-        collection(db, "classrooms"),
-        where('link','==',link)
-      );
+      const q = query(collection(db, "classrooms"), where("link", "==", link));
 
       const querySnapshot = await getDocs(q);
 
@@ -40,36 +46,37 @@ export default function StudentView() {
             email: user?.email,
           }),
         });
-        console.log('Successfully joined the class');
+        console.log("Successfully joined the class");
       } else {
-        console.log('Invalid class link');
+        console.log("Invalid class link");
       }
     } catch (error) {
-      console.error('Error joining class:', error);
+      console.error("Error joining class:", error);
     }
   };
 
   return (
-    <main className="flex items-center justify-center h-full">
+    <main className="flex items-center bg-white justify-center h-full w-full">
       <form onSubmit={handleSubmit}>
-        <div className="grid gap-4 py-4">
+        <div className="gap-4 py-4 flex">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Class Invite Link
+            <Label
+              htmlFor="username"
+              className="text-right text-lg font-semibold"
+            >
+              Enter Class Code
             </Label>
             <Input
               id="link"
-              placeholder="Class Link"
+              placeholder="Class Code"
               value={link}
               onChange={handleLinkChange}
-              className="col-span-3"
+              className="col-span-2"
             />
+            <Button type="submit">Join</Button>
           </div>
         </div>
-
-        <Button type="submit">Join</Button>
-
       </form>
     </main>
-  )
+  );
 }

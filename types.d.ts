@@ -7,3 +7,8 @@ type ChallengeProp = {
   id: string;
   name: string;
 };
+
+// classroom/page.tsx
+type UserRoleProp = {
+  userRole: "student" | "teacher" | null;
+};
