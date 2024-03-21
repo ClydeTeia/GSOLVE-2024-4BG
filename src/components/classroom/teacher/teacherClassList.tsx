@@ -7,6 +7,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { DropdownMenuButton } from "../dropDownBtn";
 import { readData } from "@/firebase/crud";
 import { UserAuth } from "@/app/context/firebaseContext";
+import Link from "next/link";
 
 type Props = {};
 
@@ -36,7 +37,7 @@ export interface ClassListType {
   link: string;
 }
 
-function TeacherClassList({}: Props) {
+function TeacherClassList({ }: Props) {
   const [classListData, setClassListData] = useState<ClassListType[]>([]);
 
   const user = UserAuth().user;
@@ -63,7 +64,8 @@ function TeacherClassList({}: Props) {
     <div className="text-black grid md:grid-cols-3 lg:grid-cols-5 grid-cols-2  gap-5">
       {classListData &&
         classListData.map((classList) => (
-          <Button
+          <Link
+            href={`/classroom/${classList.link}`}
             key={classList.createdAt}
             className="group hover:bg-[#77baac] bg-white text-black p-0 w-full h-32 flex flex-col border-[#77baac] border shadow-md"
           >
@@ -90,7 +92,7 @@ function TeacherClassList({}: Props) {
                 <DropdownMenuButton classroom={classList} />
               </div>
             </div>
-          </Button>
+          </Link>
         ))}
     </div>
   );

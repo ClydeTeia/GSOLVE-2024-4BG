@@ -6,6 +6,7 @@ import { GestureRecognizer, FilesetResolver } from "@mediapipe/tasks-vision";
 import Webcam from "react-webcam";
 import getRandomWord from "../../../utils/getRandomWord";
 import Start from "@/components/start";
+import Image from 'next/image'
 
 const Gesture: React.FC = () => {
   type RunningMode = "IMAGE" | "VIDEO";
@@ -28,6 +29,7 @@ const Gesture: React.FC = () => {
   const [recognizedText, setRecognizedText] = useState<string>("");
   const [textChallenge, setTextChallenge] = useState<string>("");
   const [hasStarted, setHasStarted] = useState<boolean>(false);
+  const [currentLetter, setCurrentLetter] = useState<string>('');
 
   let animationFrameId: number;
   let lastVideoTime = -1;
@@ -161,6 +163,8 @@ const Gesture: React.FC = () => {
 
     if (textChallenge.length > 0) {
       const firstChallengeChar = textChallenge[0];
+      setCurrentLetter(firstChallengeChar);
+      console.log(currentLetter, 'ja')
       if (
         recognizedLetter.toLowerCase() === firstChallengeChar.toLowerCase() ||
         ((recognizedLetter.toLowerCase() === "m" ||
@@ -222,9 +226,12 @@ const Gesture: React.FC = () => {
             </h3>
           </div>
           <div className="w-2/5 h-full bg-white bg-grid-gray-400/[0.1] border-4 rounded-2xl shadow-xl">
-            <div className="w-4/5 h-3/5 bg-yellow-500 mx-auto mt-16">
-              Insert Image Here
-            </div>
+            <Image
+              src={`/handsigns/${currentLetter.toLowerCase()}.png`}
+              width={500}
+              height={500}
+              alt="Picture of the author"
+            />
           </div>
         </div>
       )}
