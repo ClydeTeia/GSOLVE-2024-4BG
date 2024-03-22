@@ -61,13 +61,13 @@ const Gesture: React.FC = (challengesData) => {
   }
 
   useEffect(() => {
+    setTextChallenge(search!);
     setPageLoaded(true);
     // dont remove enableWebcam here, it is needed to only click the button once if removed you need to click it twice, which is bad
     enableWebcam();
   }, []);
 
   useEffect(() => {
-    setTextChallenge(search!);
     recognize();
     console.log("-".repeat(10));
   }, [recognizedLetter, textChallenge]);
