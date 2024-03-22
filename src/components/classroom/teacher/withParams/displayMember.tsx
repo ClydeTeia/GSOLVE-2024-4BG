@@ -6,10 +6,10 @@ import { toast } from "sonner";
 
 type Props = {
   params: string;
-  membersData: MemberProp[] | null;
+  challengeData: ChallengeProp[] | null;
 };
 
-const DisplayMember = ({ params, membersData }: Props) => {
+const DisplayMember = ({ params, challengeData }: Props) => {
   console.log("On DisplayMember " + params);
 
   const handleInviteClick = () => {
@@ -27,7 +27,7 @@ const DisplayMember = ({ params, membersData }: Props) => {
 
   return (
     <div className="w-full h-full">
-      {!membersData && (
+      {!challengeData && (
         <div className="flex flex-col items-center justify-center w-full h-full gap-5 p-10">
           <p className="text-2xl font-bold ">Share this link to add them!</p>
           <div className="flex items-center justify-center w-full h-10 p-5 border  border-gray-300 bg-gray-200 rounded-md text-sm">{`http://localhost:3000/classroom/join/${params}`}</div>
@@ -39,8 +39,8 @@ const DisplayMember = ({ params, membersData }: Props) => {
           </Button>
         </div>
       )}
-      {membersData &&
-        membersData.map((member) => (
+      {challengeData &&
+        challengeData.map((member) => (
           <div key={member.id} className="flex flex-col w-full h-full">
             <p>{member.name}</p>
           </div>

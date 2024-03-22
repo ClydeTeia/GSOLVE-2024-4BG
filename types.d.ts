@@ -7,6 +7,7 @@ type ChallengeProp = {
   id: string;
   name: string;
   students: any[] | null;
+  challenges: any[] | null;
 };
 
 // classroom/page.tsx

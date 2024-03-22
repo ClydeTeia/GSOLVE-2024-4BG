@@ -18,10 +18,12 @@ const challengeData: ChallengeProp[] | null = [
     id: "asds",
     name: "ASL For Everyone",
     students: ["Ian Clyde", "Hey"],
+    challenges: null,
   },
   {
     id: "asdasds",
     name: "ASL ",
+    challenges: null,
     students: [],
   },
 ];
@@ -53,6 +55,9 @@ export default function UniqueClassroom({ params }: Props) {
   const [isOwner, setIsOwner] = useState<[] | null>(null);
   console.log("On class[id]" + params.id);
   const router = useRouter();
+  console.log(params.id);
+  const [isChallenge, setIsChallenge] = useState<boolean>(true);
+  const [isMember, setIsMember] = useState<boolean>(false);
 
   const user = UserAuth().user;
   const userId = user?.uid;
@@ -84,10 +89,6 @@ export default function UniqueClassroom({ params }: Props) {
     else setIsOwner(null);
   }
 
-  console.log(params.id);
-  const [isChallenge, setIsChallenge] = useState<boolean>(true);
-  const [isMember, setIsMember] = useState<boolean>(false);
-
   useEffect(() => {}, []);
 
   function handleClickChallenge() {
@@ -109,9 +110,12 @@ export default function UniqueClassroom({ params }: Props) {
         </div>
         {isOwner && (
           <div className="flex gap-1">
-            <Button className="rounded-full">Add Challenge</Button>
-            <Button className="rounded-full">Edit</Button>
-            <Button className="rounded-full"></Button>
+            <Button className="rounded-full bg-blue-500 hover:bg-blue-500/75">
+              Add
+            </Button>
+            <Button className="rounded-full bg-blue-500 hover:bg-blue-500/75">
+              Edit
+            </Button>
           </div>
         )}
       </div>
@@ -142,7 +146,7 @@ export default function UniqueClassroom({ params }: Props) {
               />
             )}
             {isMember && (
-              <DisplayMember params={params.id} membersData={membersData} />
+              <DisplayMember params={params.id} challengeData={challengeData} />
             )}
           </div>
           <div className="md:w-2/5 hidden md:block border">
