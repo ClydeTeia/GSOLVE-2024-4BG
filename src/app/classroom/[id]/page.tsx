@@ -9,15 +9,22 @@ import { useRouter } from "next/navigation";
 import DisplayMember from "@/components/classroom/teacher/withParams/displayMember";
 import DisplayChallenges from "@/components/classroom/teacher/withParams/displayChallenges";
 import ClassDetails from "@/components/classroom/teacher/withParams/classDetails";
+import { readData } from "@/firebase/crud";
+import { UserAuth } from "@/app/context/firebaseContext";
 
 // change this to the commented ones for testing
-const challengesData: ChallengeProp[] | null = null;
-// [
-//   {
-//     id: 1,
-//     name: "ASL For Everyone",
-//   },
-// ];
+const challengeData: ChallengeProp[] | null = [
+  {
+    id: "asds",
+    name: "ASL For Everyone",
+    students: ["Ian Clyde", "Hey"],
+  },
+  {
+    id: "asdasds",
+    name: "ASL ",
+    students: [],
+  },
+];
 
 // change this to the commented ones for testing
 const membersData: MemberProp[] | null = null;
@@ -43,8 +50,12 @@ type Props = {
 };
 
 export default function UniqueClassroom({ params }: Props) {
+  const [isOwner, setIsOwner] = useState<[] | null>(null);
   console.log("On class[id]" + params.id);
   const router = useRouter();
+
+  const user = UserAuth().user;
+  const userId = user?.uid;
 
   useEffect(() => {
     const checkToken = async () => {
@@ -60,7 +71,18 @@ export default function UniqueClassroom({ params }: Props) {
     };
 
     checkToken();
-  }, [router]);
+
+    fetchAdmin();
+  }, [router, user, userId]);
+
+  async function fetchAdmin() {
+    const owner = await readData("classrooms", "teacherId", userId);
+    console.log("Are you the Teacher?" + owner);
+    if (!owner) return;
+
+    if ((owner.teacherId = userId)) setIsOwner(owner);
+    else setIsOwner(null);
+  }
 
   console.log(params.id);
   const [isChallenge, setIsChallenge] = useState<boolean>(true);
@@ -85,11 +107,13 @@ export default function UniqueClassroom({ params }: Props) {
         <div className="flex ">
           <div>Class Name Here</div>
         </div>
-        <div className="flex gap-1">
-          <Button className="rounded-full">Add Challenge</Button>
-          <Button className="rounded-full">Edit</Button>
-          <Button className="rounded-full"></Button>
-        </div>
+        {isOwner && (
+          <div className="flex gap-1">
+            <Button className="rounded-full">Add Challenge</Button>
+            <Button className="rounded-full">Edit</Button>
+            <Button className="rounded-full"></Button>
+          </div>
+        )}
       </div>
       {/* Bottom Half */}
       <div className="my-4 w-full ">
@@ -107,22 +131,22 @@ export default function UniqueClassroom({ params }: Props) {
             Members
           </button>
         </div>
+
         <Separator className="mb-4 my-0.5" />
         <div className="flex">
           <div className="md:w-3/5 w-full  min-h-96">
             {isChallenge && (
-              <DisplayChallenges challengesData={challengesData} />
+              <DisplayChallenges
+                challengeData={challengeData}
+                isOwner={isOwner}
+              />
             )}
             {isMember && (
               <DisplayMember params={params.id} membersData={membersData} />
             )}
           </div>
           <div className="md:w-2/5 hidden md:block border">
-            <ClassDetails
-              params={params.id}
-              membersData={membersData}
-              challengesData={challengesData}
-            />
+            <ClassDetails params={params.id} challengeData={challengeData} />
           </div>
         </div>
       </div>
