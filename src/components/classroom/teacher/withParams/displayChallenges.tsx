@@ -2,27 +2,37 @@
 
 import React from "react";
 import { CreateChallengeButton } from "../createChallenge";
+import Link from "next/link";
 
 type Props = {
-  challengesData: ChallengeProp[] | null;
+  challengeData: ChallengeProp[] | null;
+  isOwner: [] | null;
 };
 
-function DisplayChallenges({ challengesData }: Props) {
+function DisplayChallenges({ challengeData, isOwner }: Props) {
   return (
     <div className="w-full h-full">
-      {!challengesData && (
+      {!challengeData && (
         <div className="text-center flex flex-col justify-center items-center w-full h-full gap-3">
           <div>No challenges available</div>
-          <div>Create a challenge</div>
-          <CreateChallengeButton />
+          {isOwner && (
+            <>
+              <div>Create a challenge</div>
+              <CreateChallengeButton />
+            </>
+          )}
         </div>
       )}
-      {challengesData &&
-        challengesData.map((challenge) => (
-          <div key={challenge.id}>
-            <div>{challenge.name}</div>
-          </div>
-        ))}
+      <div className="flex gap-3 w-full flex-col p-5">
+        {challengeData &&
+          challengeData.map((challenge) => (
+            <Link key={challenge.id} href={`/playground/${challenge.id}`}>
+              <div className="flex flex-col gap-3 w-full rounded-md shadow-md p-5 border border-[#77baac]">
+                <div>{challenge.name}</div>
+              </div>
+            </Link>
+          ))}
+      </div>
     </div>
   );
 }

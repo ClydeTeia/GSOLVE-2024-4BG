@@ -59,9 +59,9 @@ export async function readData(table: string, name: string, value: unknown) {
     querySnapshot.forEach((doc) => {
       data.push({ id: doc.id, ...doc.data() });
     });
-    
+
     console.log("Query Result:", data);
-    return data.length > 0 ? data : [];
+    return data.length > 0 ? data : null;
   } catch (e) {
     console.error("Error reading document: ", e);
     return null;
