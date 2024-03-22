@@ -11,6 +11,7 @@ type Props = {
 };
 
 function DisplayChallenges({ link, challengeData, isOwner }: Props) {
+  console.log(isOwner,'aaaj')
   return (
     <div className="w-full h-full">
       {!challengeData && (

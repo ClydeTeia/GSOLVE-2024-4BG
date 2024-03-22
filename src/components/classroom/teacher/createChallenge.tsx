@@ -4,6 +4,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -18,14 +19,14 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { z } from "zod";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { Timestamp, arrayUnion, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
-import { useToast } from "../ui/use-toast";
+import { useToast } from "../../ui/use-toast";
 import { db } from "@/firebase/config";
 const challengeSchema = z.object({
   title: z.string().min(3, { message: "Title is required." }),
   challengeText: z.string().min(1, { message: "Challenge text is required." }),
 });
 
-export function CreateChallengeButton({link}: {link: string}) {
+export function CreateChallengeButton({ link }: { link: string }) {
   const [challengetext, setChallengeText] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -131,10 +132,12 @@ export function CreateChallengeButton({link}: {link: string}) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <DialogClose asChild>
+              <Button type="submit">Save changes</Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
 }

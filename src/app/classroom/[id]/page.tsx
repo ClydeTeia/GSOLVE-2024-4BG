@@ -14,32 +14,6 @@ import { UserAuth } from "@/app/context/firebaseContext";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/firebase/config";
 
-// change this to the commented ones for testing
-// const challengesData: ChallengeProp[] | null = null;
-// [
-//   {
-//     id: 1,
-//     name: "ASL For Everyone",
-//   },
-// ];
-
-// change this to the commented ones for testing
-const membersData: MemberProp[] | null = null;
-// [
-//  {
-//    id: "unique-id",
-//    name: "Ian",
-//  },
-//  {
-//    id: "unique-id1",
-//    name: "Yoo",
-//  },
-//  {
-//    id: "unique-id2",
-//    name: "Chad",
-//  },
-// ]
-
 type Props = {
   params: {
     id: string;
@@ -76,7 +50,7 @@ export default function UniqueClassroom({ params }: Props) {
       const usersRef = collection(db, "classrooms");
       const usersQuery = query(usersRef, where("link", "==", params.id));
       const querySnapshot = await getDocs(usersQuery);
-      console.log(querySnapshot.docs[0].data().challenges,'akakak')
+      console.log(querySnapshot.docs[0].data().challenges, 'akakak')
       setChallengesData(querySnapshot.docs[0].data().challenges)
     }
 
@@ -95,7 +69,7 @@ export default function UniqueClassroom({ params }: Props) {
     else setIsOwner(null);
   }
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   function handleClickChallenge() {
     setIsChallenge(true);
@@ -116,9 +90,7 @@ export default function UniqueClassroom({ params }: Props) {
         </div>
         {isOwner && (
           <div className="flex gap-1">
-            <Button className="rounded-full bg-blue-500 hover:bg-blue-500/75">
-              Add
-            </Button>
+            <CreateChallengeButton link={params.id} />
             <Button className="rounded-full bg-blue-500 hover:bg-blue-500/75">
               Edit
             </Button>
@@ -147,7 +119,7 @@ export default function UniqueClassroom({ params }: Props) {
           <div className="md:w-3/5 w-full  min-h-96">
             {isChallenge && (
               <DisplayChallenges link={params.id}
-                challengesData={challengesData}
+                challengeData={challengesData}
                 isOwner={isOwner}
               />
             )}
