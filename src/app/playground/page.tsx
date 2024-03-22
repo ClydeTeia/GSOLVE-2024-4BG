@@ -6,7 +6,7 @@ import { GestureRecognizer, FilesetResolver } from "@mediapipe/tasks-vision";
 import Webcam from "react-webcam";
 import getRandomWord from "../../../utils/getRandomWord";
 import Start from "@/components/start";
-import Image from 'next/image'
+import Image from "next/image";
 
 const Gesture: React.FC = () => {
   type RunningMode = "IMAGE" | "VIDEO";
@@ -29,7 +29,7 @@ const Gesture: React.FC = () => {
   const [recognizedText, setRecognizedText] = useState<string>("");
   const [textChallenge, setTextChallenge] = useState<string>("");
   const [hasStarted, setHasStarted] = useState<boolean>(false);
-  const [currentLetter, setCurrentLetter] = useState<string>('');
+  const [currentLetter, setCurrentLetter] = useState<string>("");
 
   let animationFrameId: number;
   let lastVideoTime = -1;
@@ -164,7 +164,7 @@ const Gesture: React.FC = () => {
     if (textChallenge.length > 0) {
       const firstChallengeChar = textChallenge[0];
       setCurrentLetter(firstChallengeChar);
-      console.log(currentLetter, 'ja')
+      console.log(currentLetter, "ja");
       if (
         recognizedLetter.toLowerCase() === firstChallengeChar.toLowerCase() ||
         ((recognizedLetter.toLowerCase() === "m" ||
@@ -202,7 +202,7 @@ const Gesture: React.FC = () => {
         />
       ) : (
         <div className="flex w-full h-full">
-          <div className="w-72">
+          <div className="w-72 absolute">
             <Webcam
               videoConstraints={videoConstraints}
               audio={false}
@@ -214,7 +214,7 @@ const Gesture: React.FC = () => {
               autoPlay={isPlaying}
             />
           </div>
-          <div className="w-3/5 h-3/5 m-auto">
+          <div className="w-3/5 flex flex-col justify-center items-center ">
             <h3 className="w-full text-8xl font-bold text-center mt-0">
               {recognizedLetter}
             </h3>
@@ -225,12 +225,13 @@ const Gesture: React.FC = () => {
               </span>
             </h3>
           </div>
-          <div className="w-2/5 h-full bg-white bg-grid-gray-400/[0.1] border-4 rounded-2xl shadow-xl">
+          <div className="w-2/5 h-full bg-white bg-grid-gray-400/[0.1] border-4 rounded-2xl shadow-xl flex justify-center items-center">
             <Image
               src={`/handsigns/${currentLetter.toLowerCase()}.png`}
               width={500}
-              height={500}
+              height={400}
               alt="Picture of the author"
+              className="object-contain h-60 w-96"
             />
           </div>
         </div>
