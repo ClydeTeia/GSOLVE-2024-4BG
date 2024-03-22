@@ -4,8 +4,10 @@ type MemberProp = {
 };
 
 type ChallengeProp = {
-  id: string;
-  name: string;
+  title: string;
+  createdAt: string;
+  teacherId: string;
+  challengeText: string;
 };
 
 // classroom/page.tsx

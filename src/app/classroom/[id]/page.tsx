@@ -9,9 +9,11 @@ import { useRouter } from "next/navigation";
 import DisplayMember from "@/components/classroom/teacher/withParams/displayMember";
 import DisplayChallenges from "@/components/classroom/teacher/withParams/displayChallenges";
 import ClassDetails from "@/components/classroom/teacher/withParams/classDetails";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/firebase/config";
 
 // change this to the commented ones for testing
-const challengesData: ChallengeProp[] | null = null;
+// const challengesData: ChallengeProp[] | null = null;
 // [
 //   {
 //     id: 1,
@@ -46,6 +48,8 @@ export default function UniqueClassroom({ params }: Props) {
   console.log("On class[id]" + params.id);
   const router = useRouter();
 
+  const [challengesData, setChallengesData] = useState([]);
+
   useEffect(() => {
     const checkToken = async () => {
       try {
@@ -59,6 +63,15 @@ export default function UniqueClassroom({ params }: Props) {
       }
     };
 
+    const fetchChallenges = async () => {
+      const usersRef = collection(db, "classrooms");
+      const usersQuery = query(usersRef, where("link", "==", params.id));
+      const querySnapshot = await getDocs(usersQuery);
+      console.log(querySnapshot.docs[0].data().challenges,'akakak')
+      setChallengesData(querySnapshot.docs[0].data().challenges)
+    }
+
+    fetchChallenges();
     checkToken();
   }, [router]);
 
@@ -88,7 +101,6 @@ export default function UniqueClassroom({ params }: Props) {
         <div className="flex gap-1">
           <Button className="rounded-full">Add Challenge</Button>
           <Button className="rounded-full">Edit</Button>
-          <Button className="rounded-full"></Button>
         </div>
       </div>
       {/* Bottom Half */}
@@ -111,7 +123,7 @@ export default function UniqueClassroom({ params }: Props) {
         <div className="flex">
           <div className="md:w-3/5 w-full  min-h-96">
             {isChallenge && (
-              <DisplayChallenges challengesData={challengesData} />
+              <DisplayChallenges link={params.id} challengesData={challengesData} />
             )}
             {isMember && (
               <DisplayMember params={params.id} membersData={membersData} />
