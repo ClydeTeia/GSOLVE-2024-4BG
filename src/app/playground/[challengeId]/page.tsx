@@ -67,6 +67,7 @@ const Gesture: React.FC = (challengesData) => {
   }, []);
 
   useEffect(() => {
+    setTextChallenge(search!);
     recognize();
     console.log("-".repeat(10));
   }, [recognizedLetter, textChallenge]);
@@ -162,8 +163,6 @@ const Gesture: React.FC = (challengesData) => {
   };
 
   function recognize() {
-    setTextChallenge(search!);
-
     if (textChallenge.length > 0) {
       const firstChallengeChar = textChallenge[0];
       setCurrentLetter(firstChallengeChar);
@@ -208,7 +207,7 @@ const Gesture: React.FC = (challengesData) => {
         />
       ) : (
         <div className="flex w-full h-full">
-          <div className="w-72 hidden">
+          <div className="w-72 absolute">
             <Webcam
               videoConstraints={videoConstraints}
               audio={false}
