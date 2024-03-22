@@ -69,10 +69,15 @@ function TeacherClassList({ }: Props) {
             key={classList.createdAt}
             className="group hover:bg-[#77baac] bg-white text-black p-0 w-full h-32 flex flex-col border-[#77baac] border shadow-md"
           >
-            <div className="h-2/3 flex flex-col w-full justify-evenly items-center">
-              <p>{classList.name}</p>
-              <p className="text-xs">{classList.description}</p>
-            </div>
+            <Link
+              className="h-2/3 flex flex-col w-full justify-evenly items-center"
+              href={`classroom/${classList.link}`}
+            >
+              <div className="">
+                <p>{classList.name}</p>
+                <p className="text-xs">{classList.description}</p>
+              </div>
+            </Link>
             <Separator className="w-full h-0.5 bg-[#77baac]" />
             <div className="flex bg-white hover:bg-white  px-3 items-center h-1/3 text-center w-full flex-row justify-between rounded-b-md">
               <div className="flex justify-center items-center gap-1">

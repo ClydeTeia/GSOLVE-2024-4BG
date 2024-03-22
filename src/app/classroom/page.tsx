@@ -37,12 +37,9 @@ export default function Classroom({}: Props) {
   const user = UserAuth().user;
   const userId = user?.uid;
 
-  const [classroomListData, setClassroomListData] = useState<ClassListType[]>([]);
-  // const [classroomInfoData, setClassroomInfoData] = useState<[]>([]);
-
-  // const [selectedClassroom, setSelectedClassroom] = useState<string>("");
-  // const [isClassCreated, setIsClassCreated] = useState<boolean>(false);
-  // const [isStudentAdded, setIsStudentAdded] = useState<boolean>(false);
+  const [classroomListData, setClassroomListData] = useState<ClassListType[]>(
+    []
+  );
   const [userRole, setUserRole] = useState<string | null>("loading");
   const [selectedRole, setSelectedRole] = useState<string>("student");
 
@@ -104,34 +101,6 @@ export default function Classroom({}: Props) {
     console.log("from client", userId);
   }, [router, user, userId]);
 
-  // useEffect(() => {
-  //   async function fetchData(userId: string) {
-  //     if (isClassCreated && userId) {
-  //       await readData("classrooms", "teacherId", userId).then((res) => {
-  //         setClassroomListData(res);
-  //       });
-  //     }
-  //     setIsClassCreated(false);
-  //   }
-
-  //   fetchData(userId!);
-  // }, [isClassCreated, userId]);
-
-  // useEffect(() => {
-  //   if (!isStudentAdded) return;
-  //   if (!selectedClassroom) return;
-  //   async function fetchData() {
-  //     const res = await getStudentClassroomInfo(selectedClassroom).then(
-  //       (res) => {
-  //         console.log(res);
-  //         setClassroomInfoData(res);
-  //       }
-  //     );
-  //     setIsStudentAdded(false);
-  //   }
-  //   fetchData();
-  // }, [isStudentAdded, selectedClassroom]);
-
   const handleRoleSubmit = async () => {
     try {
       console.log(selectedRole);
@@ -153,7 +122,7 @@ export default function Classroom({}: Props) {
   if (userRole === "loading") {
     return (
       <main className="flex w-full h-full flex-col">
-        <div className="h-1/4 py-5 px-12">
+        <div className="min-h-1/4 p-12">
           <Skeleton className="h-32 w-36 bg-[#D9D9D9]" />
         </div>
         <Separator className="bg-[#77baac]" />

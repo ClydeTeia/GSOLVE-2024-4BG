@@ -7,11 +7,10 @@ import Image from "next/image";
 
 type Props = {
   params: string;
-  membersData: MemberProp[] | null;
-  challengesData: ChallengeProp[] | null;
+  challengeData: ChallengeProp[] | null;
 };
 
-function ClassDetails({ params, membersData, challengesData }: Props) {
+function ClassDetails({ params, challengeData }: Props) {
   const handleInviteClick = () => {
     const inviteText = `http://localhost:3000/classroom/join/${params}`;
     console.log(inviteText);

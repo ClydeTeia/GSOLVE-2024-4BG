@@ -3,7 +3,7 @@
 import React from "react";
 import { Separator } from "../../ui/separator";
 import TeacherClassList from "./teacherClassList";
-import CreateClassroom from "../createClassroom";
+import CreateClassroom from "./createClassroom";
 
 type Props = {};
 
@@ -19,11 +19,11 @@ function TeacherClassroom({}: Props) {
   return (
     <main className=" bg-white bg-grid-gray-700/[0.1] w-full h-full">
       <div className="h-full w-full">
-        <div className="bg-white p-12 h-1/4 flex items-center">
+        <div className="bg-white p-12 min-h-1/4 flex items-center">
           <CreateClassroom />
         </div>
-        <div className="h-3/4 w-full">
-          <Separator className="bg-[#77baac] " />
+        <div className="min-h-3/4 w-full">
+          <Separator className="bg-[#77baac]" />
           <div className="p-12">
             <TeacherClassList />
           </div>
