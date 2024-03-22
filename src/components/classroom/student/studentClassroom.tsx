@@ -7,13 +7,13 @@ import { Separator } from "@/components/ui/separator";
 
 function StudentClassroom({ classrooms }: { classrooms: ClassListType[] }) {
   return (
-    <main className=" bg-[#E8F3F1] w-full h-full">
+    <main className=" bg-white bg-grid-gray-700/[0.1] w-full h-full">
       <div className="min-h-1/4">
         <JoinTab />
       </div>
-      <Separator />
+      <Separator className="bg-[#77baac] " />
       <div className="min-h-3/4 p-12">
-        <StudentClassList classrooms={classrooms} />
+        <StudentClassList classrooms={classrooms}/>
       </div>
     </main>
   );
