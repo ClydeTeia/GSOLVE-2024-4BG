@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Separator } from "@radix-ui/react-separator";
-import { DropdownMenuButton } from "./dropDownBtn";
+import { DropdownMenuButton } from "../dropDownBtn";
 import { readData } from "@/firebase/crud";
 import { UserAuth } from "@/app/context/firebaseContext";
+import Link from "next/link";
 
 type Props = {};
 
@@ -59,25 +60,30 @@ function TeacherClassList({ }: Props) {
     fetchData();
   }, [user, userId]);
 
-
   return (
-    <div className="text-black grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2  gap-5">
+    <div className="text-black grid md:grid-cols-3 lg:grid-cols-5 grid-cols-2  gap-5">
       {classListData &&
         classListData.map((classList) => (
-          <Button
+          <Link
+            href={`/classroom/${classList.link}`}
             key={classList.createdAt}
             className="group hover:bg-[#77baac] bg-white text-black p-0 w-full h-32 flex flex-col border-[#77baac] border shadow-md"
           >
-            <div className="h-2/3 flex flex-col w-full justify-evenly items-center">
-              <p>{classList.name}</p>
-              <p className="text-xs">{classList.description}</p>
-            </div>
+            <Link
+              className="h-2/3 flex flex-col w-full justify-evenly items-center"
+              href={`classroom/${classList.link}`}
+            >
+              <div className="">
+                <p>{classList.name}</p>
+                <p className="text-xs">{classList.description}</p>
+              </div>
+            </Link>
             <Separator className="w-full h-0.5 bg-[#77baac]" />
             <div className="flex bg-white hover:bg-white  px-3 items-center h-1/3 text-center w-full flex-row justify-between rounded-b-md">
               <div className="flex justify-center items-center gap-1">
                 <div>
                   <Image
-                    src={"/people.png"}
+                    src={"/icons/people.png"}
                     alt={"group icon"}
                     width={24}
                     height={24}
@@ -91,7 +97,7 @@ function TeacherClassList({ }: Props) {
                 <DropdownMenuButton classroom={classList} />
               </div>
             </div>
-          </Button>
+          </Link>
         ))}
     </div>
   );

@@ -4,10 +4,7 @@
 //   createClassroom,
 //   addStudentToClassroom,
 // } from "../../../utils/classroom/createClassroom";
-import { use, useEffect, useState } from "react";
-import { CreateClassroom } from "@/components/classroom/createClassroomV1";
-import DisplayClassroomLists from "@/components/classroom/displayClassroomLists";
-import DisplayClassroomInfo from "@/components/classroom/displayClassroomInfo";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { readData } from "@/firebase/crud";
@@ -22,12 +19,15 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
-import { db, auth } from "@/firebase/config";
+import { db } from "@/firebase/config";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
-import { User } from "firebase/auth";
 import TeacherClassroom from "@/components/classroom/teacher/teacherClassroom";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+import StudentClassroom from "@/components/classroom/student/studentClassroom";
+import { ClassListType } from "@/components/classroom/teacher/teacherClassList";
 
 type Props = {};
 
@@ -37,11 +37,9 @@ export default function Classroom({}: Props) {
   const user = UserAuth().user;
   const userId = user?.uid;
 
-  const [classroomListData, setClassroomListData] = useState<any[]>([]);
-  const [classroomInfoData, setClassroomInfoData] = useState<[]>([]);
-  const [selectedClassroom, setSelectedClassroom] = useState<string>("");
-  const [isClassCreated, setIsClassCreated] = useState<boolean>(false);
-  const [isStudentAdded, setIsStudentAdded] = useState<boolean>(false);
+  const [classroomListData, setClassroomListData] = useState<ClassListType[]>(
+    []
+  );
   const [userRole, setUserRole] = useState<string | null>("loading");
   const [selectedRole, setSelectedRole] = useState<string>("student");
 
@@ -54,23 +52,13 @@ export default function Classroom({}: Props) {
       router.push("/login");
     }
 
-    // fetch classroom list data
-    async function fetchData(userId: string) {
-      await readData("classrooms", "teacherId", userId).then((res) => {
-        setClassroomListData(res);
-      });
-    }
-
     async function fetchStudentClassrooms(user: DocumentData) {
       try {
         const q = query(
           collection(db, "classrooms"),
           where("students", "array-contains", {
             email: user.email,
-            id: user.userId,
-            role: "student",
-            userId: user.userId,
-            username: user.username,
+            name: user.username,
           })
         );
 
@@ -110,51 +98,8 @@ export default function Classroom({}: Props) {
     };
     fetchUserRole();
 
-    fetchData(userId!);
-
     console.log("from client", userId);
   }, [router, user, userId]);
-
-  useEffect(() => {
-    async function fetchData(userId: string) {
-      if (isClassCreated && userId) {
-        await readData("classrooms", "teacherId", userId).then((res) => {
-          setClassroomListData(res);
-        });
-      }
-      setIsClassCreated(false);
-    }
-
-    fetchData(userId!);
-  }, [isClassCreated, userId]);
-
-  useEffect(() => {
-    if (!isStudentAdded) return;
-    if (!selectedClassroom) return;
-    async function fetchData() {
-      const res = await getStudentClassroomInfo(selectedClassroom).then(
-        (res) => {
-          console.log(res);
-          setClassroomInfoData(res);
-        }
-      );
-      setIsStudentAdded(false);
-    }
-    fetchData();
-  }, [isStudentAdded, selectedClassroom]);
-
-  const handleClassroomClick = async (classroomId: string) => {
-    // Set the selected classroom
-    setSelectedClassroom(classroomId);
-    console.log("Selected classroom:", classroomId);
-    async function fetchData() {
-      const res = await getStudentClassroomInfo(classroomId).then((res) => {
-        console.log(res);
-        setClassroomInfoData(res);
-      });
-    }
-    fetchData();
-  };
 
   const handleRoleSubmit = async () => {
     try {
@@ -176,8 +121,17 @@ export default function Classroom({}: Props) {
 
   if (userRole === "loading") {
     return (
-      <main className="flex items-center justify-center h-full">
-        <div>Loading... please wait</div>
+      <main className="flex w-full h-full flex-col">
+        <div className="min-h-1/4 p-12">
+          <Skeleton className="h-32 w-36 bg-[#D9D9D9]" />
+        </div>
+        <Separator className="bg-[#77baac]" />
+        <div className="h-3/4 w-full p-12 bg-[#E8F3F1]">
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 grid-cols-2 gap-5">
+            <Skeleton className="w-full h-32 bg-[#D9D9D9]" />
+            <Skeleton className="w-full h-32 bg-[#D9D9D9]" />
+          </div>
+        </div>
       </main>
     );
   }
@@ -207,7 +161,7 @@ export default function Classroom({}: Props) {
     );
   } else if (userRole === "teacher") {
     return <TeacherClassroom />;
-  } else {
-    return <main></main>;
+  } else if (userRole === "student") {
+    return <StudentClassroom classrooms={classroomListData} />;
   }
 }

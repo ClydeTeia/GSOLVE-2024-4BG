@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,25 +10,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DeleteBtn } from "./deleteClass";
+import { DeleteBtn } from "./teacher/deleteClass";
 import { toast } from "sonner";
-import { ClassListType } from "./teacherClassList";
+import { ClassListType } from "./teacher/teacherClassList";
 
-export function DropdownMenuButton({ classroom }: { classroom: ClassListType }) {
+export function DropdownMenuButton({
+  classroom,
+}: {
+  classroom: ClassListType;
+}) {
   const handleInviteClick = () => {
     const inviteText = `http://localhost:3000/classroom/join/${classroom.link}`;
-    console.log(inviteText)
+    console.log(inviteText);
     navigator.clipboard
       .writeText(inviteText)
       .then(() => {
-        toast("Successfully copied invite link", {
-          description: inviteText,
-        });
+        toast("Join link copied " + inviteText);
       })
       .catch((err) => {
         console.error("Failed to copy:", err);
       });
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -44,7 +49,7 @@ export function DropdownMenuButton({ classroom }: { classroom: ClassListType }) 
           <DropdownMenuItem onClick={handleInviteClick}>
             Copy Invite Link
           </DropdownMenuItem>
-          <DeleteBtn classroom={classroom}/>
+          <DeleteBtn classroom={classroom} />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

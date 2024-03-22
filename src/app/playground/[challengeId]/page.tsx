@@ -4,10 +4,20 @@
 import { useEffect, useState, useRef } from "react";
 import { GestureRecognizer, FilesetResolver } from "@mediapipe/tasks-vision";
 import Webcam from "react-webcam";
-import { asl_vocabulary } from "../../data/samples/typeraceWords";
+import getRandomWord from "../../../../utils/getRandomWord";
+import Start from "@/components/start";
+import Image from "next/image";
+import { useRouter, useSearchParams } from 'next/navigation'
+import { UserAuth } from "@/app/context/firebaseContext";
 
-const Gesture: React.FC = () => {
+const Gesture: React.FC = (challengesData) => {
+  const router = useRouter();
+
+  console.log(challengesData);
   type RunningMode = "IMAGE" | "VIDEO";
+  const searchParams = useSearchParams()
+
+  const search = searchParams.get('challengeText')
 
   const webcamRef = useRef<Webcam | null>(null);
   const videoHeight = "360px";
@@ -25,8 +35,9 @@ const Gesture: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [recognizedLetter, setRecognizedLetter] = useState<string>("");
   const [recognizedText, setRecognizedText] = useState<string>("");
-  const [textChallenge, setTextChallenge] = useState<string>("");
-  const aslVocabulary: string[] = asl_vocabulary;
+  const [textChallenge, setTextChallenge] = useState<string>("placeholder");
+  const [hasStarted, setHasStarted] = useState<boolean>(false);
+  const [currentLetter, setCurrentLetter] = useState<string>("");
 
   let animationFrameId: number;
   let lastVideoTime = -1;
@@ -50,8 +61,8 @@ const Gesture: React.FC = () => {
   }
 
   useEffect(() => {
+    setTextChallenge(search!);
     setPageLoaded(true);
-    randomWord();
     // dont remove enableWebcam here, it is needed to only click the button once if removed you need to click it twice, which is bad
     enableWebcam();
   }, []);
@@ -152,14 +163,10 @@ const Gesture: React.FC = () => {
   };
 
   function recognize() {
-    if (textChallenge.length === 0) {
-      setRecognizedText("");
-      setTextChallenge(randomWord());
-      console.log("textChallenge", textChallenge);
-    }
-
     if (textChallenge.length > 0) {
       const firstChallengeChar = textChallenge[0];
+      setCurrentLetter(firstChallengeChar);
+      console.log(currentLetter, "ja");
       if (
         recognizedLetter.toLowerCase() === firstChallengeChar.toLowerCase() ||
         ((recognizedLetter.toLowerCase() === "m" ||
@@ -184,59 +191,47 @@ const Gesture: React.FC = () => {
         console.log("recognizedTextInitial", recognizedTextInitial);
         console.log("textChallengeInitial", textChallengeInitial);
       }
+    } else {
+      console.log('done');
+      router.back()
     }
   }
 
-  function randomWord() {
-    const randomIndex = Math.floor(Math.random() * aslVocabulary.length);
-    return aslVocabulary[randomIndex];
-  }
-
   return (
-    <div className="w-full h-screen bg-gray-800 flex flex-col items-center">
-      <div className="w-72">
-        {pageLoaded && (
-          <button
-            id="webcamButton"
-            onClick={async () => {
-              await enableWebcam();
-            }}
-          >
-            Enable Webcam
-          </button>
-        )}
-
-        <button
-          className="ml-10"
-          onClick={() => {
-            setTextChallenge(randomWord());
-            setRecognizedText("");
-          }}
-        >
-          Skip
-        </button>
-        <Webcam
-          videoConstraints={videoConstraints}
-          audio={false}
-          ref={webcamRef}
-          className="z-10 aspect-video opacity-0"
-          id="webcam"
-          width={videoWidth}
-          height={videoHeight}
-          autoPlay={isPlaying}
+    <div className="w-full h-full bg-white bg-dot-black/[0.1] flex flex-col items-center">
+      {!hasStarted ? (
+        <Start
+          textChallenge={textChallenge}
+          setHasStarted={setHasStarted}
+          enableWebcam={enableWebcam}
         />
-      </div>
-      <div className="w-4/5 h-4/5 m-auto">
-        <h3 className="w-full text-7xl font-bold text-center mt-0">
-          {recognizedLetter}
-        </h3>
-        <h3 className="w-full text-4xl font-bold text-center mt-6">
-          <span id="recognized-text">{recognizedText}</span>
-          <span id="text-challenge" className="text-gray-400">
-            {textChallenge}
-          </span>
-        </h3>
-      </div>
+      ) : (
+        <div className="flex w-full h-full">
+          <div className="w-72 absolute">
+            <Webcam
+              videoConstraints={videoConstraints}
+              audio={false}
+              ref={webcamRef}
+              className="absolute z-10 aspect-video opacity-0"
+              id="webcam"
+              width={videoWidth}
+              height={videoHeight}
+              autoPlay={isPlaying}
+            />
+          </div>
+          <div className="w-3/5 h-3/5 m-auto">
+            <h3 className="w-full text-8xl font-bold text-center mt-0">
+              {recognizedLetter}
+            </h3>
+            <h3 className="w-full text-6xl font-bold text-center mt-6">
+              <span id="recognized-text">{recognizedText}</span>
+              <span id="text-challenge" className="text-gray-400">
+                {textChallenge}
+              </span>
+            </h3>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

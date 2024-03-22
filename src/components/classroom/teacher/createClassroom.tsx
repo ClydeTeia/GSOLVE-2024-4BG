@@ -2,8 +2,8 @@
 "use client";
 
 import React from "react";
-import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
+import { Button } from "../../ui/button";
+import { Separator } from "../../ui/separator";
 import {
   Dialog,
   DialogClose,
@@ -21,8 +21,8 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { z } from "zod";
 import { UserAuth } from "@/app/context/firebaseContext";
 import { Timestamp } from "firebase/firestore";
-import { useToast } from "@/components/ui/use-toast";
-import { generateRandomString } from '../../../utils/generateLink'
+import { toast } from "sonner";
+import { generateRandomString } from "../../../../utils/generateLink";
 
 type Props = {};
 
@@ -37,12 +37,10 @@ const classroomSchema = z.object({
     .max(250, { message: "Maximum is 250" }),
 });
 
-function CreateClassroom({ }: Props) {
+function CreateClassroom({}: Props) {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-
-  const { toast } = useToast();
 
   const auth = UserAuth();
 
@@ -73,17 +71,13 @@ function CreateClassroom({ }: Props) {
       ...validationResult.data,
       teacherId: creatorId,
       createdAt: Timestamp.now(),
-      link: generateRandomString(8)
+      link: generateRandomString(12),
     };
 
     console.log(objectData);
     await createData("classrooms", objectData);
-    toast({
-      title: "You successfully create a classroom",
-      description: "Created a class with name of " + name,
-    });
-
-    console.log("Description :", description);
+    toast("You successfully create a classroom " + name),
+      console.log("Description :", description);
     console.log("name: ", name);
     setDescription("");
     setName("");

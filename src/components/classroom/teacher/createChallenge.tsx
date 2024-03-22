@@ -4,6 +4,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -17,14 +18,15 @@ import { createData } from "@/firebase/crud";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { z } from "zod";
 import { UserAuth } from "@/app/context/firebaseContext";
-import { Timestamp } from "firebase/firestore";
-import { useToast } from "../ui/use-toast";
+import { Timestamp, arrayUnion, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { useToast } from "../../ui/use-toast";
+import { db } from "@/firebase/config";
 const challengeSchema = z.object({
   title: z.string().min(3, { message: "Title is required." }),
   challengeText: z.string().min(1, { message: "Challenge text is required." }),
 });
 
-export function CreateChallengeButton() {
+export function CreateChallengeButton({ link }: { link: string }) {
   const [challengetext, setChallengeText] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +64,23 @@ export function CreateChallengeButton() {
     };
 
     console.log(objectData);
-    await createData("challenges", objectData);
+    // await createData("challenges", objectData);
+    const q = query(collection(db, "classrooms"), where("link", "==", link));
+
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      // Get the first matching document
+      const classroomDoc = querySnapshot.docs[0];
+
+      // Update the students array with the user's details
+      await updateDoc(classroomDoc.ref, {
+        challenges: arrayUnion(objectData),
+      });
+      console.log("Successfully joined the class");
+    } else {
+      console.log("Invalid class link");
+    }
     toast({
       title: "You successfully create a challenge",
       description:
@@ -114,10 +132,12 @@ export function CreateChallengeButton() {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <DialogClose asChild>
+              <Button type="submit">Save changes</Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
 }
