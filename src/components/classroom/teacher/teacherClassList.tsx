@@ -37,7 +37,7 @@ export interface ClassListType {
   link: string;
 }
 
-function TeacherClassList({ }: Props) {
+function TeacherClassList({}: Props) {
   const [classListData, setClassListData] = useState<ClassListType[]>([]);
 
   const user = UserAuth().user;
@@ -90,7 +90,7 @@ function TeacherClassList({ }: Props) {
                   ></Image>
                 </div>
 
-                <div>Members {3}</div>
+                <div>Members {0}</div>
               </div>
 
               <div>
