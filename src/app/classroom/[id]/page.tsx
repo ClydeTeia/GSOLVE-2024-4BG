@@ -50,9 +50,9 @@ export default function UniqueClassroom({ params }: Props) {
       const usersRef = collection(db, "classrooms");
       const usersQuery = query(usersRef, where("link", "==", params.id));
       const querySnapshot = await getDocs(usersQuery);
-      console.log(querySnapshot.docs[0].data().challenges, 'akakak')
-      setChallengesData(querySnapshot.docs[0].data().challenges)
-    }
+      console.log(querySnapshot.docs[0].data().challenges, "akakak");
+      setChallengesData(querySnapshot.docs[0].data().challenges);
+    };
 
     fetchChallenges();
     checkToken();
@@ -69,7 +69,7 @@ export default function UniqueClassroom({ params }: Props) {
     else setIsOwner(null);
   }
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
   function handleClickChallenge() {
     setIsChallenge(true);
@@ -118,13 +118,17 @@ export default function UniqueClassroom({ params }: Props) {
         <div className="flex">
           <div className="md:w-3/5 w-full  min-h-96">
             {isChallenge && (
-              <DisplayChallenges link={params.id}
+              <DisplayChallenges
+                link={params.id}
                 challengeData={challengesData}
                 isOwner={isOwner}
               />
             )}
             {isMember && (
-              <DisplayMember params={params.id} challengeData={challengesData} />
+              <DisplayMember
+                params={params.id}
+                challengeData={challengesData}
+              />
             )}
           </div>
           <div className="md:w-2/5 hidden md:block border">

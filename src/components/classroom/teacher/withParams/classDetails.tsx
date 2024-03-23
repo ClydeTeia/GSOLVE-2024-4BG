@@ -12,7 +12,7 @@ type Props = {
 
 function ClassDetails({ params, challengeData }: Props) {
   const handleInviteClick = () => {
-    const inviteText = `http://localhost:3000/classroom/join/${params}`;
+    const inviteText = `${process.env.NEXT_PUBLIC_PATH}/classroom/join/${params}`;
     console.log(inviteText);
     navigator.clipboard
       .writeText(inviteText)
@@ -30,7 +30,7 @@ function ClassDetails({ params, challengeData }: Props) {
       <div className="w-full flex flex-col gap-3">
         <p className="w-full text-left">INVITE LINK</p>
         <div className="flex w-full items-center gap-2">
-          <div className="p-2 rounded-md border-gray-300 border-2">{`http://localhost:3000/classroom/join/${params}`}</div>
+          <div className="p-2 rounded-md border-gray-300 border-2">{`${process.env.NEXT_PUBLIC_PATH}/classroom/join/${params}`}</div>
           <Button
             className="bg-blue-600 hover:bg-blue-500"
             onClick={handleInviteClick}
