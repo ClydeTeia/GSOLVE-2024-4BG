@@ -45,7 +45,7 @@ function StudentClassList({ classrooms }: { classrooms: ClassListType[] }) {
                   ></Image>
                 </div>
 
-                <div>Members {3}</div>
+                <div>Members {0}</div>
               </div>
 
               <div>
